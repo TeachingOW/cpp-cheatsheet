@@ -521,56 +521,19 @@ cout << duration_cast<ms>(to - from)
   .count() << "ms";
 ```
 
-## `thread` (Multi-threading library)
-```cpp
-#include <thread>         // Include thread
-unsigned c = 
-  hardware_concurrency(); // Hardware threads (or 0 for unknown)
-auto lambdaFn = [](){     // Lambda function used for thread body
-    cout << "Hello multithreading";
-};
-thread t(lambdaFn);       // Create and run thread with lambda
-t.join();                 // Wait for t finishes
-
-// --- shared resource example ---
-mutex mut;                         // Mutex for synchronization
-condition_variable cond;           // Shared condition variable
-const char* sharedMes              // Shared resource
-  = nullptr;
-auto pingPongFn =                  // thread body (lambda). Print someone else's message
-  [&](const char* mes){
-    while (true){
-      unique_lock<mutex> lock(mut);// locks the mutex 
-      do {                
-        cond.wait(lock, [&](){     // wait for condition to be true (unlocks while waiting which allows other threads to modify)        
-          return sharedMes != mes; // statement for when to continue
-        });
-      } while (sharedMes == mes);  // prevents spurious wakeup
-      cout << sharedMes << endl;
-      sharedMes = mes;       
-      lock.unlock();               // no need to have lock on notify 
-      cond.notify_all();           // notify all condition has changed
-    }
-  };
-sharedMes = "ping";
-thread t1(pingPongFn, sharedMes);  // start example with 3 concurrent threads
-thread t2(pingPongFn, "pong");
-thread t3(pingPongFn, "boing");
+## std::string_view
+A non-owning reference to a string. Useful for providing an abstraction on top of strings (e.g. for parsing).
 ```
-
-## `future` (thread support library)
-```cpp
-#include <future>         // Include future
-function<int(int)> fib =  // Create lambda function
-  [&](int i){
-    if (i <= 1){
-      return 1;
-    }
-    return fib(i-1) 
-         + fib(i-2);
-  };
-future<int> fut =         // result of async function
-  async(launch::async, fib, 4); // start async function in other thread
-// do some other work 
-cout << fut.get();        // get result of async function. Wait if needed.
+// Regular strings.
+std::string_view cppstr {"foo"};
+// Wide strings.
+std::wstring_view wcstr_v {L"baz"};
+// Character arrays.
+char array[3] = {'b', 'a', 'r'};
+std::string_view array_v(array, std::size(array));
+std::string str {"   trim me"};
+std::string_view v {str};
+v.remove_prefix(std::min(v.find_first_not_of(" "), v.size()));
+str; //  == "   trim me"
+v; // == "trim me"
 ```
