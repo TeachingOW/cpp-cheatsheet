@@ -7,7 +7,7 @@ C++11 additions is inspired by <a href="https://isocpp.org/blog/2012/12/c11-a-ch
 
 The goal is to give a concise overview of basic, modern C++ (C++14).
 
-The document is hosted on https://github.com/mortennobel/cpp-cheatsheet. Any comments and feedback are appreciated.
+
 
 ## Preprocessor
 
