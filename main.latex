@@ -1,0 +1,303 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Jacobs Portrait Poster (C++ Cheat Sheet Edition)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[final]{beamer}
+
+\usepackage[scale=1.24]{beamerposter}
+\usetheme{confposter}
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    columns=fullflexible
+}
+
+
+\setbeamercolor{block title}{fg=ngreen,bg=white}
+\setbeamercolor{block body}{fg=black,bg=white}
+
+% Column widths
+\newlength{\sepwid}
+\newlength{\onecolwid}
+\newlength{\twocolwid}
+\newlength{\threecolwid}
+\setlength{\paperwidth}{36in}
+\setlength{\paperheight}{48in}
+\setlength{\sepwid}{0.024\paperwidth}
+\setlength{\onecolwid}{0.22\paperwidth}
+\setlength{\twocolwid}{0.464\paperwidth}
+\setlength{\threecolwid}{0.708\paperwidth}
+\setlength{\topmargin}{-0.5in}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\title{C++ Cheat Sheet for Java Programmers}
+\author{Your Name}
+\institute{Department / University}
+
+\begin{document}
+
+\begin{frame}[t,fragile]
+
+\begin{columns}[t]
+
+% LEFT SPACER
+\begin{column}{\sepwid}\end{column}
+
+% LEFT COLUMN ------------------------------------------------------
+\begin{column}{\onecolwid}
+
+%-------------------------------------------------------
+\begin{block}{1. Basic Syntax}
+\begin{itemize}
+    \item Include headers: \texttt{\#include <iostream>}, \texttt{\#include <cmath>}, \texttt{\#include <string>}
+    \item Entry point: \texttt{int main() \{ ... \}}
+    \item Semicolons end all statements.
+    \item Comments: \texttt{//} (single line), \texttt{/* ... */} (multi-line)
+\end{itemize}
+\end{block}
+
+%-------------------------------------------------------
+\begin{block}{2. Data Types}
+\begin{itemize}
+    \item Integers: \texttt{int}, \texttt{long}, \texttt{long long}
+    \item Unsigned: \texttt{unsigned int}, \texttt{unsigned long}
+    \item Floating point: \texttt{float}, \texttt{double}
+    \item Boolean: \texttt{bool}
+    \item Character: \texttt{char}
+    \item String: \texttt{std::string}
+    \item References: \texttt{int\& r = x;} (alias to variable)
+\end{itemize}
+\end{block}
+
+%-------------------------------------------------------
+\begin{block}{3. Variables and Constants}
+\begin{itemize}
+    \item Declaration: \texttt{int age;}
+    \item Initialization: \texttt{double pi = 3.14159;}
+    \item Constants: \texttt{const int MAX\_VALUE = 100;}
+\end{itemize}
+\end{block}
+
+%-------------------------------------------------------
+\begin{block}{4. Input and Output}
+\begin{itemize}
+    \item Input: \texttt{cin >> x;}
+    \item Output: \texttt{cout << "Hello" << endl;}
+    \item Fixed precision: \texttt{cout << fixed << setprecision(2) << value;}
+\end{itemize}
+\end{block}
+
+%-------------------------------------------------------
+\begin{block}{5. Operators}
+\begin{itemize}
+    \item Arithmetic: \texttt{+ - * / \%}
+    \item Comparison: \texttt{== != > < >= <=}
+    \item Logical: \texttt{\&\&}, \texttt{||}, \texttt{!}
+    \item Bitwise: \texttt{\&}, \texttt{|}, \texttt{\^{ }}, \texttt{\~{}}, \texttt{<<}, \texttt{>>}
+    \item Assignment: \texttt{+= -= *= /= \%=}
+    \item Increment / decrement: \texttt{++}, \texttt{--}
+\end{itemize}
+\end{block}
+
+\end{column}
+
+% SPACER
+\begin{column}{\sepwid}\end{column}
+
+% MIDDLE DOUBLE-WIDTH COLUMN ----------------------------------------
+\begin{column}{\twocolwid}
+
+\begin{columns}[t,totalwidth=\twocolwid]
+
+%-----------------------------------------------------
+\begin{column}{\onecolwid}
+\begin{block}{6. Control Flow}
+\begin{itemize}
+    \item If/else: \texttt{if(cond)\{...\} else \{...\}}
+    \item Switch:
+    \texttt{switch(x)\{ case 1: ...; break; \}}
+    \item Loops:
+    \begin{itemize}
+        \item \texttt{for(init; cond; inc)\{...\}}
+        \item \texttt{while(cond)\{...\}}
+        \item \texttt{do\{...\} while(cond);}
+    \end{itemize}
+    \item \texttt{break}, \texttt{continue}
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{7. Functions}
+\begin{itemize}
+    \item Syntax: \texttt{return\_type name(params)\{...\}}
+    \item Overloading: same name, different parameters.
+    \item Default parameters: \texttt{int f(int x=0);}
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{8. Arrays}
+\begin{itemize}
+    \item Declaration: \texttt{int a[10];}
+    \item Access: \texttt{a[0]}
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{9. Pointers}
+\begin{itemize}
+    \item Declare: \texttt{int* p;}
+    \item Address-of: \texttt{\&x}
+    \item Dereference: \texttt{*p}
+\end{itemize}
+\end{block}
+
+\end{column}
+
+%---------------- MIDDLE COLUMN (RIGHT HALF) -----------------------
+\begin{column}{\onecolwid}
+
+%-----------------------------------------------------
+\begin{block}{10. Classes and Objects}
+\begin{itemize}
+    \item Class = data + methods
+    \item Create objects: \texttt{MyClass obj;}
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{11. Strings}
+\begin{itemize}
+    \item Include: \texttt{\#include <string>}
+    \item Create: \texttt{string s = "Hello";}
+    \item Methods: \texttt{length()}, \texttt{substr()}, \texttt{find()}
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{12. Standard Template Library (STL)}
+\begin{itemize}
+    \item Containers: \texttt{vector}, \texttt{list}, \texttt{map}, \texttt{set}
+    \item Algorithms: \texttt{sort()}, \texttt{find()}
+    \item Iterators for traversal
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{13. Memory Management}
+\begin{itemize}
+    \item Dynamic allocation: \texttt{int* p = new int;}
+    to free memory 
+    \textt{   delete p;}
+    \item Allocate an array: \texttt{int *p=new int[20];}
+    to free memory 
+    \textt{   delete p[];}
+    \item Free memory: \texttt{delete p;}
+    \item Smart pointers: \texttt{unique\_ptr}, \texttt{shared\_ptr}
+    
+\end{itemize}
+\end{block}
+
+\end{column}
+\end{columns}
+
+%-----------------------------------------------------
+\begin{alertblock}{Logical Expression Evaluation in C++}
+\textbf{Logical Operators:}
+\begin{itemize}
+    \item AND: \texttt{\&\&}
+    \item OR: \texttt{||}
+    \item NOT: \texttt{!}
+\end{itemize}
+\textbf{Short circuit:}
+\begin{itemize}
+    \item \texttt{false \&\& expr} → right side not evaluated
+    \item \texttt{true || expr} → right side not evaluated
+\end{itemize}
+\end{alertblock}
+
+\end{column}
+
+% RIGHT SIDE COLUMN ------------------------------------------------
+\begin{column}{\sepwid}\end{column}
+
+\begin{column}{\onecolwid}
+
+%-----------------------------------------------------
+\begin{block}{14. File Input/Output}
+\begin{itemize}
+    \item \texttt{ifstream} → read files
+    \item \texttt{ofstream} → write files
+    \item \texttt{fstream} → both
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{15. Namespaces}
+\begin{itemize}
+    \item Avoid conflicts using namespaces.
+    \item \texttt{using namespace std;}
+    \item Or fully qualify: \texttt{std::cout}
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{16. Exception Handling}
+\begin{itemize}
+    \item \texttt{try \{...\} catch(exception\& e) \{...\}}
+    \item \texttt{throw} to signal errors
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{17. OOP Concepts}
+\begin{itemize}
+    \item Encapsulation, inheritance, polymorphism
+    \item Access: \texttt{public}, \texttt{private}, \texttt{protected}
+    \item Constructors / destructors
+\end{itemize}
+\end{block}
+
+%-----------------------------------------------------
+\begin{block}{18. Templates}
+\begin{itemize}
+    \item Write generic code:
+\end{itemize}
+\texttt{template <typename T> T max(T a, T b)\{...\}}
+\end{block}
+
+%-----------------------------------------------------
+\begin{alertblock}{Key Differences from Java}
+\begin{itemize}
+    \item No garbage collection (manual memory management)
+    \item Direct pointer manipulation
+    \item Multiple inheritance allowed
+    \item Operator overloading
+    \item Lower-level control of hardware
+\end{itemize}
+\end{alertblock}
+
+
+\begin{block}{C++ Hello World}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello World" << endl;
+    return 0;
+}
+\end{lstlisting}
+\end{block}
+
+\end{column}
+
+\end{columns}
+\end{frame}
+\end{document}
