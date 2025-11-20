@@ -1,1 +1,4 @@
-# c-cheatsheet
+```bash
+latexmk -pdf main.latex
+
+```
