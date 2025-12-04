@@ -1,0 +1,663 @@
+\documentclass[final]{beamer}
+
+\usepackage[scale=1.0]{beamerposter}
+\usetheme{confposter}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{multirow}
+
+\setlength{\paperwidth}{36in}
+\setlength{\paperheight}{48in}
+\setlength{\topmargin}{-0.5in}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\begin{document}
+
+\section*{C++ Reference Card}
+
+\begin{frame}[t,fragile]
+
+\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+
+% ---------------- Column 1 ----------------
+\begin{column}{0.3\paperwidth}
+
+\begin{block}{C++ Data Types}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Data Type} & \textbf{Description} \\
+\hline
+bool & boolean (true or false) \\
+\hline
+char & character ('a', 'b', etc.) \\
+\hline
+char[] & character array (C-style string if null terminated) \\
+\hline
+string & C++ string (from the STL) \\
+\hline
+int & Integer (1, 2, -1, 1000, etc.) \\
+\hline
+long int & long integer \\
+\hline
+float & single precision floating point \\
+\hline
+double & double precision floating point \\
+\hline
+\end{tabular}
+
+These are the most commonly used types: this is not a complete list.
+\end{block}
+
+\begin{block}{Operators}
+The most commonly used operators in order of precedence:
+\begin{enumerate}
+    \item $++(\text{post-increment}), --(\text{post-decrement})$
+    \item $!(\text{not}), ++ (\text{pre-increment}), -- (\text{pre-decrement})$
+    \item $* / , \% (\text{modulus})$
+    \item $+-$
+    \item $<, <=, >, >=\text{}$
+    \item $==(\text{equal-to}), != (\text{not-equal-to})$
+    \item $\&\&$ (and)
+    \item $||$ (or)
+    \item $= (\text{assignment}), * , / , \%= , +=, -= $
+\end{enumerate}
+\end{block}
+
+\begin{block}{while Loop}
+\begin{verbatim}
+while (expression)
+  statement;
+\end{verbatim}
+Example:
+\begin{verbatim}
+while (x < 100)
+  cout << x++ << endl;
+\end{verbatim}
+\begin{verbatim}
+while (expression)
+{
+  statement;
+  statement;
+}
+\end{verbatim}
+Example:
+\begin{verbatim}
+while (x < 100)
+{
+  cout << x << endl;
+  x++;
+}
+\end{verbatim}
+\end{block}
+
+\begin{block}{do-while Loop}
+\begin{verbatim}
+do
+  statement;
+while (expression);
+\end{verbatim}
+Example:
+\begin{verbatim}
+do
+  cout << x++ << endl;
+while (x < 100);
+\end{verbatim}
+\begin{verbatim}
+do
+{
+  statement;
+  statement;
+}
+while (expression);
+\end{verbatim}
+Example:
+\begin{verbatim}
+do
+{
+  cout << x << endl;
+  x++;
+}
+while (x < 100);
+\end{verbatim}
+\end{block}
+
+\end{column}
+
+% ---------------- Column 2 ----------------
+\begin{column}{0.3\paperwidth}
+
+\begin{block}{for Loop}
+\begin{verbatim}
+for (initialization; test; update)
+  statement;
+\end{verbatim}
+\begin{verbatim}
+for (initialization; test; update)
+{
+  statement;
+  statement;
+}
+\end{verbatim}
+Example:
+\begin{verbatim}
+for (count = 0; count < 10; count++)
+{
+  cout << "count equals: ";
+  cout << count << endl;
+}
+\end{verbatim}
+\end{block}
+
+\begin{block}{Decision Statements}
+\end{block}
+
+\begin{block}{if}
+\begin{verbatim}
+if (expression)
+  statement;
+\end{verbatim}
+Example:
+\begin{verbatim}
+if (x < y)
+  cout << x;
+\end{verbatim}
+\end{block}
+
+\begin{block}{if/else}
+\begin{verbatim}
+if (expression)
+  statement;
+else
+  statement;
+\end{verbatim}
+Example:
+\begin{verbatim}
+if (x < y)
+  cout << x;
+else
+  cout << y;
+\end{verbatim}
+\end{block}
+
+\begin{block}{switch/case}
+\begin{verbatim}
+switch(int expression)
+{
+  case int-constant:
+    statement(s);
+    break;
+  case int-constant:
+    statement(s);
+    break;
+  default:
+    statement;
+}
+\end{verbatim}
+Example:
+\begin{verbatim}
+switch(choice)
+{
+  case 0:
+    cout << "Zero";
+    break;
+  case 1:
+    cout << "One";
+    break;
+  default:
+    cout << "What?";
+}
+\end{verbatim}
+\end{block}
+
+\begin{block}{Pointers}
+A pointer variable (or just pointer) is a variable that stores a memory address. Pointers allow the indirect manipulation of data stored in memory. Pointers are declared using *. To set a pointer's value to the address of another variable, use the \& operator.
+Example:
+\begin{verbatim}
+char c = 'a';
+char* cPtr;
+cPtr = &c;
+\end{verbatim}
+Use the indirection operator (*) to access or change the value that the pointer references.
+Example:
+\begin{verbatim}
+// continued from example above
+*cPtr = 'b';
+cout << *cPtr << endl; // prints the char b
+// prints the char b
+\end{verbatim}
+
+Array names can be used as constant pointers, and pointers can be used as array names.
+Example:
+\begin{verbatim}
+int numbers[] = {10, 20, 30, 40, 50};
+int* numPtr = numbers;
+cout << numbers[0] << endl; // prints 10
+cout << *numPtr << endl;    // prints 10
+cout << numbers[1] << endl; // prints 20
+cout << *(numPtr + 1) << endl; // prints 20
+cout << numPtr[2] << endl;  // prints 30
+\end{verbatim}
+\end{block}
+
+\begin{block}{Dynamic Memory}
+\end{block}
+
+\begin{block}{Allocate Memory}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Syntax} & \textbf{Examples} \\
+\hline
+ptr = new type; & int* iPtr; \\
+ & iPtr = new int; \\
+\hline
+ptr = new type [size]; & int* intArray; \\
+ & intArray = new int[5]; \\
+\hline
+\end{tabular}
+\end{block}
+
+\begin{block}{Deallocate Memory}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Syntax} & \textbf{Examples} \\
+\hline
+delete ptr; & delete iPtr; \\
+\hline
+delete [] ptr; & delete [] intArray; \\
+\hline
+\end{tabular}
+
+Once a pointer is used to allocate the memory for an array, array notation can be used to access the array locations.
+Example:
+\begin{verbatim}
+int* intArray;
+intArray = new int[5];
+intArray[0] = 23;
+intArray[1] = 32;
+\end{verbatim}
+\end{block}
+
+\begin{block}{Console Input/Output}
+\begin{itemize}
+    \item \texttt{cout <<} console out, printing to screen
+    \item \texttt{cin >>} console in, reading from keyboard
+    \item \texttt{cerr <<} console error
+\end{itemize}
+Example:
+\begin{verbatim}
+cout << "Enter an integer: ";
+cin >> i;
+cout << "Input: " << i << endl;
+\end{verbatim}
+\end{block}
+
+\begin{block}{File Input/Output}
+Example (input):
+\begin{verbatim}
+ifstream inputFile;
+inputFile.open("data.txt");
+inputFile >> inputVariable;
+// you can also use get (char) or
+// getline (entire line) in addition to >>
+inputFile.close();
+\end{verbatim}
+Example (output):
+\begin{verbatim}
+ofstream outFile;
+outFile.open("output.txt");
+outFile << outputVariable;
+outFile.close();
+\end{verbatim}
+\end{block}
+
+\begin{block}{Functions}
+Functions return at most one value. A function that does not return a value has a return type of \texttt{void}. Values needed by a function are called parameters.
+\begin{verbatim}
+return_type function(type p1, type p2,...)
+{
+  statement;
+  statement;
+}
+\end{verbatim}
+Examples:
+\begin{verbatim}
+int timesTwo(int v)
+{
+  int d;
+  d = v * 2;
+  return d;
+}
+void printCourseNumber()
+{
+  cout << "CSE1284" << endl;
+  return;
+}
+\end{verbatim}
+\end{block}
+
+\begin{block}{Passing Parameters by Value}
+\begin{verbatim}
+return_type function(type p1)
+\end{verbatim}
+Variable is passed into the function but changes to \texttt{p1} are not passed back.
+\end{block}
+
+\begin{block}{Passing Parameters by Reference}
+\begin{verbatim}
+return_type function(type &p1)
+\end{verbatim}
+Variable is passed into the function and changes to \texttt{p1} are passed back.
+\end{block}
+
+\begin{block}{Default Parameter Values}
+\begin{verbatim}
+return_type function(type p1=val)
+\end{verbatim}
+\texttt{val} is used as the value of \texttt{p1} if the function is called without a parameter.
+\end{block}
+
+\begin{block}{Structures}
+\end{block}
+
+\begin{block}{Declaration}
+\begin{verbatim}
+struct name
+{
+  type1 element1;
+  type2 element2;
+};
+\end{verbatim}
+Example:
+\begin{verbatim}
+struct Hamburger
+{
+  int patties;
+  bool cheese;
+};
+\end{verbatim}
+\end{block}
+
+\begin{block}{Definition}
+\begin{verbatim}
+name varName;
+name* ptrName;
+\end{verbatim}
+\end{block}
+
+\begin{block}{Accessing Members}
+\begin{verbatim}
+varName.element = val;
+ptrName->element = val;
+\end{verbatim}
+Example:
+\begin{verbatim}
+Hamburger h;
+Hamburger* hPtr;
+hPtr = &h;
+\end{verbatim}
+Example:
+\begin{verbatim}
+h.patties = 2;
+h.cheese = true;
+hPtr->patties = 1;
+hPtr->cheese = false;
+\end{verbatim}
+Structures can be used just like the built-in data types in arrays.
+\end{block}
+
+% ---------------- Column 3 ----------------
+\end{column}
+\begin{column}{0.3\paperwidth}
+
+\begin{block}{Classes}
+\end{block}
+
+\begin{block}{Declaration}
+\begin{verbatim}
+class classname
+{
+public:
+  classname (params);
+  ~classname();
+  type member1;
+  type member2;
+protected:
+  type member3;
+private:
+  type member4;
+};
+\end{verbatim}
+Example:
+\begin{verbatim}
+class Square
+{
+public:
+  Square();
+  Square (float w);
+  void setWidth(float w);
+  float getArea();
+private:
+  float width;
+};
+\end{verbatim}
+\begin{itemize}
+    \item \texttt{public} members are accessible from anywhere the class is visible.
+    \item \texttt{private} members are only accessible from the same class or a friend (function or class).
+    \item \texttt{protected} members are accessible from the same class, derived classes, or a friend (function or class).
+    \item constructors may be overloaded just like any other function. You can define two or more constructors as long as each constructor has a different parameter list.
+\end{itemize}
+\end{block}
+
+\begin{block}{Definition of Member Functions}
+\begin{verbatim}
+return_type classname::functionName (params)
+{
+  statements;
+}
+\end{verbatim}
+Examples:
+\begin{verbatim}
+Square::Square()
+{
+  width = 0;
+}
+void Square::setWidth(float w)
+{
+  if (w >= 0)
+    width = w;
+  else
+    exit(-1);
+}
+float Square::getArea()
+{
+  return width * width;
+}
+\end{verbatim}
+\end{block}
+
+\begin{block}{Definition of Instances}
+\begin{verbatim}
+classname varName;
+classname* ptrName;
+\end{verbatim}
+Example:
+\begin{verbatim}
+Square s1();
+Square s2(3.5);
+Square* sPtr;
+sPtr = new Square (1.8);
+\end{verbatim}
+\end{block}
+
+\begin{block}{Accessing Members}
+\begin{verbatim}
+varName.member = val;
+varName.member();
+ptrName->member = val;
+ptrName->member();
+\end{verbatim}
+Example:
+\begin{verbatim}
+s1.setWidth(1.5);
+cout << s1.getArea();
+cout << sPtr->getArea();
+\end{verbatim}
+\end{block}
+
+\begin{block}{Inheritance}
+Inheritance allows a new class to be based on an existing class. The new class inherits all the member variables and functions (except the constructors and destructor) of the class it is based on.
+Example:
+\begin{verbatim}
+class Student
+{
+public:
+  Student (string n, string id);
+  void print();
+protected:
+  string name;
+  string netID;
+};
+class GradStudent : public Student
+{
+public:
+  GradStudent(string n, string id, string prev);
+  void print();
+protected:
+  string prevDegree;
+};
+\end{verbatim}
+\end{block}
+
+\begin{block}{Visibility of Members after Inheritance}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multirow{2}{*}{Inheritance Specification} & \multicolumn{3}{c|}{Access Specifier in Base Class} \\
+\cline{2-4}
+ & private & protected & public \\
+\hline
+private & private & private & private \\
+\hline
+protected & protected & protected & protected \\
+\hline
+public & protected & protected & public \\
+\hline
+\end{tabular}
+\end{block}
+
+\begin{block}{Operator Overloading}
+C++ allows you to define how standard operators (+, -, *, etc.) work with classes that you write. For example, to use the operator $+$ with your class, you would write a function named \texttt{operator+} for your class.
+Example:
+Prototype for a function that overloads $+$ for the \texttt{Square} class:
+\begin{verbatim}
+Square operator+ (const Square &);
+\end{verbatim}
+If the object that receives the function call is not an instance of a class that you wrote, write the function as a \texttt{friend} of your class. This is standard practice for overloading \texttt{<<} and \texttt{>>}.
+Example:
+Prototype for a function that overloads \texttt{<<} for the \texttt{Square} class:
+\begin{verbatim}
+friend ostream & operator<<
+  (ostream &, const Square &);
+\end{verbatim}
+Make sure the return type of the overloaded function matches what C++ programmers expect. The return type of relational operators $(<, >, ==, \text{etc.})$ should be \texttt{bool}, the return type of \texttt{<<} should be \texttt{ostream \&}, etc.
+\end{block}
+
+\begin{block}{Exceptions}
+Example:
+\begin{verbatim}
+try
+{
+  // code here calls functions that might
+  // throw exceptions
+  quotient = divide (num1, num2);
+
+  // or this code might test and throw
+  // exceptions directly
+  if (num3 < 0)
+    throw -1; // exception to be thrown can
+              // be a value or an object
+}
+catch (int)
+{
+  cout << "num3 can not be negative!";
+  exit(-1);
+}
+catch (char* exceptionString)
+{
+  cout << exceptionString;
+  exit(-2);
+}
+// add more catch blocks as needed
+\end{verbatim}
+\end{block}
+
+\begin{block}{Function Templates}
+Example:
+\begin{verbatim}
+template <class T>
+T getMax(T a, T b)
+{
+  if (a > b)
+    return a;
+  else
+    return b;
+}
+\end{verbatim}
+Example calls:
+\begin{verbatim}
+int a = 9, b = 2, c;
+c = getMax(a, b);
+float f = 5.3, g = 9.7, h;
+h = getMax(f, g);
+\end{verbatim}
+\end{block}
+
+\begin{block}{Class Templates}
+Example:
+\begin{verbatim}
+template <class T>
+class Point
+{
+public:
+  Point(T x, T y);
+  void print();
+  double distance (Point<T> p);
+private:
+  T x;
+  T y;
+};
+\end{verbatim}
+Examples:
+\begin{verbatim}
+Point<int> p1(3, 2);
+Point<float> p2(3.5, 2.5);
+p1.print();
+p2.print();
+\end{verbatim}
+\end{block}
+
+\begin{block}{Suggested Websites}
+\begin{itemize}
+    \item C++ Reference: \texttt{http://www.cppreference.com/}
+    \item C++ Tutorial: \texttt{http://www.cplusplus.com/doc/tutorial/}
+    \item \texttt{http://www.informit.com/guides/guide.aspx?g=cplusplus}
+    \item \texttt{http://www.sparknotes.com/cs/}
+    \item C++ Examples: \texttt{http://www.fredosaurus.com/notes-cpp/}
+    \item Gaddis Textbook: \texttt{http://media.pearsoncmg.com/aw/aw\_gaddis\_sowcso\_6/videos}
+    \item Video Notes Source Code: \texttt{ftp://ftp.aw.com/cseng/authors/gaddis/CCSos (5th edition)}
+\end{itemize}
+Developed for Mississippi State University's CSE1284 and CSE1384 courses.
+Download the latest version from \texttt{http://cse.msstate.edu/~crumpton/reference}.  
+February 17, 2009.
+\end{block}
+
+\end{column}
+
+\end{columns}
+\end{frame}
+
+\end{document}
