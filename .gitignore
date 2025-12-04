@@ -6,7 +6,7 @@
 *.blg
 *.out
 *.dvi
-*.pdf
+
 *.ps
 *.synctex.gz
 *.fls
