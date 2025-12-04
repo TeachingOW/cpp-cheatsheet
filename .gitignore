@@ -20,3 +20,48 @@
 .DS_Store
 *~
 .#*
+
+# Core LaTeX/pdfLaTeX auxiliary files
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.fls
+*.out
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+
+# Bibliography auxiliary files (BibTeX/BibLaTeX/Biber)
+*.bbl
+*.blg
+*.nav
+*.snm
+
+# Indexing and Glossary files
+*.idx
+*.ind
+*.ilg
+*.glo
+*.gls
+*.glg
+
+# SyncTeX and other build-related files
+*.synctex.gz
+*.fdb_latexmk
+*.maf
+*.mtc
+*.mtc1
+
+# Intermediate documents
+*.dvi
+*.ps
+
+# Editor-specific or OS-generated files (optional, depending on your setup)
+.DS_Store
+Thumbs.db
+*~
+.#*
