@@ -12,7 +12,11 @@
 \setlength{\paperwidth}{36in}
 \setlength{\paperheight}{48in}
 \setlength{\topmargin}{-0.5in}
-
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{multicol}
 \usepackage{listings}
 \usepackage{xcolor}
 
@@ -59,14 +63,38 @@
 
 
 \begin{frame}[t,fragile]{C++98}
-\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+%\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
 
 % ---------------- Column 1 ----------------
-\begin{column}{0.22\paperwidth}
+%\begin{column}{0.22\paperwidth}
 
 %%begin{block}
- 
-\section{C++ Data Types}
+\vspace{-1cm}
+\section{Preprocessor}
+\vspace{-1cm}
+%begin{block}
+\begin{lstlisting}[language=C++]
+// Comment to end of line
+/* Multi-line comment */
+#include <stdio.h>         // Insert standard header file
+#include "myfile.h"         // Insert file in current directory
+#define X some text         // Replace X with some text
+#define F(a,b) a+b          // Replace F(1,2) with 1+2
+#define X \
+ some text                 // Multiline definition
+#undef X                    // Remove definition
+#if defined(X)              // Conditional compilation (#ifdef X)
+#else                       // Optional (#ifndef X or #if !defined(X))
+#endif                      // Required after #if, #ifdef
+\end{lstlisting}
+%\end{block}
+
+ \vspace{-1cm}
+\section{Data Types}
+\vspace{-1cm}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Data Type} & \textbf{Description} \\
@@ -128,16 +156,14 @@ while (x < 100)
   cout << x++ << endl;
 \end{lstlisting}
 \begin{lstlisting}
-while (expression)
-{
+while (expression){
   statement;
   statement;
 }
 \end{lstlisting}
 {\it Example:}
 \begin{lstlisting}
-while (x < 100)
-{
+while (x < 100){
   cout << x << endl;
   x++;
 }
@@ -159,21 +185,17 @@ do
 while (x < 100);
 \end{lstlisting}
 \begin{lstlisting}
-do
-{
+do{
   statement;
   statement;
-}
-while (expression);
+} while (expression);
 \end{lstlisting}
 {\it Example:}
 \begin{lstlisting}
-do
-{
+do {
   cout << x << endl;
   x++;
-}
-while (x < 100);
+} while (x < 100);
 \end{lstlisting}
 %\end{block}
 
@@ -194,8 +216,7 @@ for (initialization; test; update)
 \end{lstlisting}
 
 \begin{lstlisting}
-for (initialization; test; update)
-{
+for (initialization; test; update){
   statement;
   statement;
 }
@@ -206,15 +227,14 @@ for (initialization; test; update)
 %&
 %\begin{minipage}{0.45\linewidth}
 
-\end{column}
+%\end{column}
 % ---------------- Column 2 ----------------
-\begin{column}{0.23\paperwidth}
+%\begin{column}{0.23\paperwidth}
 
 {\it Example:}
 
 \begin{lstlisting}
-for (count = 0; count < 10; count++)
-{
+for (count = 0; count < 10; count++) {
   cout << "count equals: " << count << endl;
   
 }
@@ -355,8 +375,8 @@ ptr = new type [size]; & int* intArray; \\
 %\end{block}
 
 %begin{block}
- \end{column}
-\begin{column}{0.23\paperwidth}
+ %\end{column}
+%\begin{column}{0.23\paperwidth}
 
 \subsection{Deallocate Memory}
 \begin{tabular}{|l|l|}
@@ -426,14 +446,12 @@ return_type function(type p1, type p2,...)
 \end{lstlisting}
 Examples:
 \begin{lstlisting}
-int timesTwo(int v)
-{
+int timesTwo(int v) {
   int d;
   d = v * 2;
   return d;
 }
-void printCourseNumber()
-{
+void printCourseNumber() {
   cout << "CSE1284" << endl;
   return;
 }
@@ -464,21 +482,21 @@ return_type function(type p1=val)
 \end{lstlisting}
 \texttt{val} is used as the value of \texttt{p1} if the function is called without a parameter.
 %\end{block}
-\end{column}
+%\end{column}
 % ---------------- Column 3 ----------------
-\begin{column}{0.23\paperwidth}
+%\begin{column}{0.23\paperwidth}
 %begin{block}
+\vspace{-1.cm}
  \subsection{Struct/Classes}
+ \vspace{-1.cm}
 %\end{block}
 %begin{block}
- \subsection{Classes}
 %\end{block}
 
 %begin{block}
  \subsection{Declaration}
 \begin{lstlisting}
-class classname
-{
+class classname {
 public:
   classname (params);
   ~classname();
@@ -492,8 +510,7 @@ private:
 \end{lstlisting}
 Example:
 \begin{lstlisting}
-class Square
-{
+class Square {
 public:
   Square();
   Square (float w);
@@ -514,26 +531,22 @@ private:
 %begin{block}
  \subsection{Definition of Member Functions}
 \begin{lstlisting}
-return_type classname::functionName (params)
-{
+return_type classname::functionName (params) {
   statements;
 }
 \end{lstlisting}
 Examples:
 \begin{lstlisting}
-Square::Square()
-{
+Square::Square() {
   width = 0;
 }
-void Square::setWidth(float w)
-{
+void Square::setWidth(float w) {
   if (w >= 0)
     width = w;
   else
     exit(-1);
 }
-float Square::getArea()
-{
+float Square::getArea() {
   return width * width;
 }
 \end{lstlisting}
@@ -569,13 +582,20 @@ cout << s1.getArea();
 cout << sPtr->getArea();
 \end{lstlisting}
 %\end{block}
-\end{column}
-\end{columns}
+%\end{column}
+%\end{columns}
+\end{multicols}
 \end{frame}
 \begin{frame}[t,fragile]{OOP, Templates, Exceptions}
-\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+
+%\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+
 % ---------------- Column 1 ----------------
-\begin{column}{0.22\paperwidth}
+%\begin{column}{0.22\paperwidth}
 %begin{block}
 
  \subsection{OOP Principles}
@@ -668,9 +688,9 @@ Prototype for a function that overloads $+$ for the \texttt{Square} class:
 Square operator+ (const Square &);
 \end{lstlisting}
 
-\end{column}
+%\end{column}
 % ---------------- Column 2 ----------------
-\begin{column}{0.23\paperwidth}
+%\begin{column}{0.23\paperwidth}
 If the object that receives the function call is not an instance of a class that you wrote, write the function as a \texttt{friend} of your class. This is standard practice for overloading \texttt{<<} and \texttt{>>}.
 
 
@@ -686,6 +706,15 @@ friend ostream & operator<<
 \end{lstlisting}
 Make sure the return type of the overloaded function matches what C++ programmers expect. The return type of relational operators $(<, >, ==, \text{etc.})$ should be \texttt{bool}, the return type of \texttt{<<} should be \texttt{ostream \&}, etc.
 %\end{block}
+
+
+\subsection{Namespaces}
+\begin{lstlisting}[language=C++]
+namespace N { class T {}; }
+N::T t;
+using namespace N;
+\end{lstlisting}
+
 
 %begin{block}
  \subsection{Exceptions}
@@ -780,9 +809,10 @@ p2.print();
 %February 17, 2009.
 %\end{block}
 
-\end{column}
+%\end{column}
 
-\end{columns}
+%\end{columns}
+\end{multicols}
 \end{frame}
 
 \end{document}
