@@ -16,16 +16,44 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+\makeatletter
+\renewcommand{\section}[1]{%
+  \par\vspace{1em}%
+  {\noindent\usebeamerfont{section title}\Large\bfseries #1\par}%
+  \vspace{0.5em}\hrule\vspace{1em}%
+}
+\makeatletter
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{lightgray}{gray}{0.95}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    columns=fullflexible,
+    frame=single,
+    backgroundcolor=\color{lightgray},
+  % rulecolor=\color{black},
+  % tabsize=4,
+  showspaces=false,
+   showstringspaces=false,
+    language=c++,
+     literate={'}{{'}}1
+} 
+\title{C++ QUICK REFERENCE / C++ CHEATSHEET}
 \begin{document}
 
-\section*{C++ Reference Card}
+%\section*{C++ Reference Card}
+
 
 \begin{frame}[t,fragile]
 
 \begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
 
 % ---------------- Column 1 ----------------
-\begin{column}{0.3\paperwidth}
+\begin{column}{0.22\paperwidth}
 
 \begin{block}{C++ Data Types}
 \begin{tabular}{|l|l|}
@@ -36,7 +64,8 @@ bool & boolean (true or false) \\
 \hline
 char & character ('a', 'b', etc.) \\
 \hline
-char[] & character array (C-style string if null terminated) \\
+char[] & character array (C-style string  \\
+ & if null terminated) \\
 \hline
 string & C++ string (from the STL) \\
 \hline
@@ -68,124 +97,153 @@ The most commonly used operators in order of precedence:
 \end{enumerate}
 \end{block}
 
-\begin{block}{while Loop}
-\begin{verbatim}
+
+\section{Looping}
+
+%\begin{sectionblock}{Loops}
+%\end{sectionblock}
+\begin{block}{\raggedright while Loop}
+\begin{lstlisting}
 while (expression)
   statement;
-\end{verbatim}
-Example:
-\begin{verbatim}
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
 while (x < 100)
   cout << x++ << endl;
-\end{verbatim}
-\begin{verbatim}
+\end{lstlisting}
+\begin{lstlisting}
 while (expression)
 {
   statement;
   statement;
 }
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 while (x < 100)
 {
   cout << x << endl;
   x++;
 }
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
-\begin{block}{do-while Loop}
-\begin{verbatim}
+\begin{block}{\raggedright do-while Loop}
+\begin{lstlisting}
 do
   statement;
 while (expression);
-\end{verbatim}
-Example:
-\begin{verbatim}
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
 do
   cout << x++ << endl;
 while (x < 100);
-\end{verbatim}
-\begin{verbatim}
+\end{lstlisting}
+\begin{lstlisting}
 do
 {
   statement;
   statement;
 }
 while (expression);
-\end{verbatim}
-Example:
-\begin{verbatim}
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
 do
 {
   cout << x << endl;
   x++;
 }
 while (x < 100);
-\end{verbatim}
+\end{lstlisting}
 \end{block}
+
+%\end{column}
+
+% ---------------- Column 2 ----------------
+%\begin{column}{0.3\paperwidth}
+\subsection{For Loop}
+\begin{block}{\raggedright for Loop} 
+%\begin{tabular}{l | l}
+
+%\begin{minipage}{0.45\linewidth}
+
+\begin{lstlisting}
+for (initialization; test; update)
+  statement;
+\end{lstlisting}
+
+\begin{lstlisting}
+for (initialization; test; update)
+{
+  statement;
+  statement;
+}
+\end{lstlisting}
+
+%\end{minipage}
+%&
+%\begin{minipage}{0.45\linewidth}
+
+Example:
+
+\begin{lstlisting}
+for (count = 0; count < 10; count++)
+{
+  cout << "count equals: " << count << endl;
+  
+}
+\end{lstlisting}
+
+%\end{minipage}
+
+%\end{tabular}
+\end{block}
+
+
 
 \end{column}
-
 % ---------------- Column 2 ----------------
 \begin{column}{0.3\paperwidth}
 
-\begin{block}{for Loop}
-\begin{verbatim}
-for (initialization; test; update)
-  statement;
-\end{verbatim}
-\begin{verbatim}
-for (initialization; test; update)
-{
-  statement;
-  statement;
-}
-\end{verbatim}
-Example:
-\begin{verbatim}
-for (count = 0; count < 10; count++)
-{
-  cout << "count equals: ";
-  cout << count << endl;
-}
-\end{verbatim}
-\end{block}
+%\begin{block}{\raggedright Decision Statements}
+%\end{block}
+\sectoin{Decision Statements}
 
-\begin{block}{Decision Statements}
-\end{block}
 
-\begin{block}{if}
-\begin{verbatim}
+
+\begin{block}{\raggedright if}
+\begin{lstlisting}
 if (expression)
   statement;
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 if (x < y)
   cout << x;
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
-\begin{block}{if/else}
-\begin{verbatim}
+\begin{block}{\raggedright if/else}
+\begin{lstlisting}
 if (expression)
   statement;
 else
   statement;
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 if (x < y)
   cout << x;
 else
   cout << y;
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
-\begin{block}{switch/case}
-\begin{verbatim}
+\begin{block}{\raggedright switch/case}
+\begin{lstlisting}
 switch(int expression)
 {
   case int-constant:
@@ -197,11 +255,11 @@ switch(int expression)
   default:
     statement;
 }
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 switch(choice)
-{
+{ 
   case 0:
     cout << "Zero";
     break;
@@ -211,29 +269,29 @@ switch(choice)
   default:
     cout << "What?";
 }
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
-\begin{block}{Pointers}
+\section{Pointers}
 A pointer variable (or just pointer) is a variable that stores a memory address. Pointers allow the indirect manipulation of data stored in memory. Pointers are declared using *. To set a pointer's value to the address of another variable, use the \& operator.
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 char c = 'a';
 char* cPtr;
 cPtr = &c;
-\end{verbatim}
+\end{lstlisting}
 Use the indirection operator (*) to access or change the value that the pointer references.
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 // continued from example above
 *cPtr = 'b';
 cout << *cPtr << endl; // prints the char b
 // prints the char b
-\end{verbatim}
+\end{lstlisting}
 
 Array names can be used as constant pointers, and pointers can be used as array names.
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 int numbers[] = {10, 20, 30, 40, 50};
 int* numPtr = numbers;
 cout << numbers[0] << endl; // prints 10
@@ -241,13 +299,13 @@ cout << *numPtr << endl;    // prints 10
 cout << numbers[1] << endl; // prints 20
 cout << *(numPtr + 1) << endl; // prints 20
 cout << numPtr[2] << endl;  // prints 30
-\end{verbatim}
-\end{block}
+\end{lstlisting}
+%\end{block}
 
-\begin{block}{Dynamic Memory}
-\end{block}
+\section{Dynamic Memory}
 
-\begin{block}{Allocate Memory}
+
+\begin{block}{\raggedright Allocate Memory}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Syntax} & \textbf{Examples} \\
@@ -261,7 +319,7 @@ ptr = new type [size]; & int* intArray; \\
 \end{tabular}
 \end{block}
 
-\begin{block}{Deallocate Memory}
+\begin{block}{\raggedright Deallocate Memory}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Syntax} & \textbf{Examples} \\
@@ -274,58 +332,58 @@ delete [] ptr; & delete [] intArray; \\
 
 Once a pointer is used to allocate the memory for an array, array notation can be used to access the array locations.
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 int* intArray;
 intArray = new int[5];
 intArray[0] = 23;
 intArray[1] = 32;
-\end{verbatim}
+\end{lstlisting}
 \end{block}
-
-\begin{block}{Console Input/Output}
+\section{I/O}
+\begin{block}{\\raggedright Console Input/Output}
 \begin{itemize}
     \item \texttt{cout <<} console out, printing to screen
     \item \texttt{cin >>} console in, reading from keyboard
     \item \texttt{cerr <<} console error
 \end{itemize}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 cout << "Enter an integer: ";
 cin >> i;
 cout << "Input: " << i << endl;
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
-\begin{block}{File Input/Output}
+\begin{block}{\raggedright File Input/Output}
 Example (input):
-\begin{verbatim}
+\begin{lstlisting}
 ifstream inputFile;
 inputFile.open("data.txt");
 inputFile >> inputVariable;
 // you can also use get (char) or
 // getline (entire line) in addition to >>
 inputFile.close();
-\end{verbatim}
+\end{lstlisting}
 Example (output):
-\begin{verbatim}
+\begin{lstlisting}
 ofstream outFile;
 outFile.open("output.txt");
 outFile << outputVariable;
 outFile.close();
-\end{verbatim}
+\end{lstlisting}
 \end{block}
-
+\section{Function}
 \begin{block}{Functions}
 Functions return at most one value. A function that does not return a value has a return type of \texttt{void}. Values needed by a function are called parameters.
-\begin{verbatim}
+\begin{lstlisting}
 return_type function(type p1, type p2,...)
 {
   statement;
   statement;
 }
-\end{verbatim}
+\end{lstlisting}
 Examples:
-\begin{verbatim}
+\begin{lstlisting}
 int timesTwo(int v)
 {
   int d;
@@ -337,27 +395,27 @@ void printCourseNumber()
   cout << "CSE1284" << endl;
   return;
 }
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Passing Parameters by Value}
-\begin{verbatim}
+\begin{lstlisting}
 return_type function(type p1)
-\end{verbatim}
+\end{lstlisting}
 Variable is passed into the function but changes to \texttt{p1} are not passed back.
 \end{block}
 
 \begin{block}{Passing Parameters by Reference}
-\begin{verbatim}
+\begin{lstlisting}
 return_type function(type &p1)
-\end{verbatim}
+\end{lstlisting}
 Variable is passed into the function and changes to \texttt{p1} are passed back.
 \end{block}
 
 \begin{block}{Default Parameter Values}
-\begin{verbatim}
+\begin{lstlisting}
 return_type function(type p1=val)
-\end{verbatim}
+\end{lstlisting}
 \texttt{val} is used as the value of \texttt{p1} if the function is called without a parameter.
 \end{block}
 
@@ -365,48 +423,48 @@ return_type function(type p1=val)
 \end{block}
 
 \begin{block}{Declaration}
-\begin{verbatim}
+\begin{lstlisting}
 struct name
 {
   type1 element1;
   type2 element2;
 };
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 struct Hamburger
 {
   int patties;
   bool cheese;
 };
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Definition}
-\begin{verbatim}
+\begin{lstlisting}
 name varName;
 name* ptrName;
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Accessing Members}
-\begin{verbatim}
+\begin{lstlisting}
 varName.element = val;
 ptrName->element = val;
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 Hamburger h;
 Hamburger* hPtr;
 hPtr = &h;
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 h.patties = 2;
 h.cheese = true;
 hPtr->patties = 1;
 hPtr->cheese = false;
-\end{verbatim}
+\end{lstlisting}
 Structures can be used just like the built-in data types in arrays.
 \end{block}
 
@@ -418,7 +476,7 @@ Structures can be used just like the built-in data types in arrays.
 \end{block}
 
 \begin{block}{Declaration}
-\begin{verbatim}
+\begin{lstlisting}
 class classname
 {
 public:
@@ -431,9 +489,9 @@ protected:
 private:
   type member4;
 };
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 class Square
 {
 public:
@@ -444,7 +502,7 @@ public:
 private:
   float width;
 };
-\end{verbatim}
+\end{lstlisting}
 \begin{itemize}
     \item \texttt{public} members are accessible from anywhere the class is visible.
     \item \texttt{private} members are only accessible from the same class or a friend (function or class).
@@ -454,14 +512,14 @@ private:
 \end{block}
 
 \begin{block}{Definition of Member Functions}
-\begin{verbatim}
+\begin{lstlisting}
 return_type classname::functionName (params)
 {
   statements;
 }
-\end{verbatim}
+\end{lstlisting}
 Examples:
-\begin{verbatim}
+\begin{lstlisting}
 Square::Square()
 {
   width = 0;
@@ -477,42 +535,42 @@ float Square::getArea()
 {
   return width * width;
 }
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Definition of Instances}
-\begin{verbatim}
+\begin{lstlisting}
 classname varName;
 classname* ptrName;
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 Square s1();
 Square s2(3.5);
 Square* sPtr;
 sPtr = new Square (1.8);
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Accessing Members}
-\begin{verbatim}
+\begin{lstlisting}
 varName.member = val;
 varName.member();
 ptrName->member = val;
 ptrName->member();
-\end{verbatim}
+\end{lstlisting}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 s1.setWidth(1.5);
 cout << s1.getArea();
 cout << sPtr->getArea();
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Inheritance}
 Inheritance allows a new class to be based on an existing class. The new class inherits all the member variables and functions (except the constructors and destructor) of the class it is based on.
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 class Student
 {
 public:
@@ -530,7 +588,7 @@ public:
 protected:
   string prevDegree;
 };
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Visibility of Members after Inheritance}
@@ -553,22 +611,22 @@ public & protected & protected & public \\
 C++ allows you to define how standard operators (+, -, *, etc.) work with classes that you write. For example, to use the operator $+$ with your class, you would write a function named \texttt{operator+} for your class.
 Example:
 Prototype for a function that overloads $+$ for the \texttt{Square} class:
-\begin{verbatim}
+\begin{lstlisting}
 Square operator+ (const Square &);
-\end{verbatim}
+\end{lstlisting}
 If the object that receives the function call is not an instance of a class that you wrote, write the function as a \texttt{friend} of your class. This is standard practice for overloading \texttt{<<} and \texttt{>>}.
 Example:
 Prototype for a function that overloads \texttt{<<} for the \texttt{Square} class:
-\begin{verbatim}
+\begin{lstlisting}
 friend ostream & operator<<
   (ostream &, const Square &);
-\end{verbatim}
+\end{lstlisting}
 Make sure the return type of the overloaded function matches what C++ programmers expect. The return type of relational operators $(<, >, ==, \text{etc.})$ should be \texttt{bool}, the return type of \texttt{<<} should be \texttt{ostream \&}, etc.
 \end{block}
 
 \begin{block}{Exceptions}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 try
 {
   // code here calls functions that might
@@ -592,12 +650,12 @@ catch (char* exceptionString)
   exit(-2);
 }
 // add more catch blocks as needed
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Function Templates}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 template <class T>
 T getMax(T a, T b)
 {
@@ -606,19 +664,19 @@ T getMax(T a, T b)
   else
     return b;
 }
-\end{verbatim}
+\end{lstlisting}
 Example calls:
-\begin{verbatim}
+\begin{lstlisting}
 int a = 9, b = 2, c;
 c = getMax(a, b);
 float f = 5.3, g = 9.7, h;
 h = getMax(f, g);
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Class Templates}
 Example:
-\begin{verbatim}
+\begin{lstlisting}
 template <class T>
 class Point
 {
@@ -630,14 +688,14 @@ private:
   T x;
   T y;
 };
-\end{verbatim}
+\end{lstlisting}
 Examples:
-\begin{verbatim}
+\begin{lstlisting}
 Point<int> p1(3, 2);
 Point<float> p2(3.5, 2.5);
 p1.print();
 p2.print();
-\end{verbatim}
+\end{lstlisting}
 \end{block}
 
 \begin{block}{Suggested Websites}
