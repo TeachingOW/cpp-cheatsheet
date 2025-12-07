@@ -53,11 +53,11 @@
 
 \begin{document}
 
-\begin{frame}[t]
+\begin{frame}[t,fragile]
 
 \setlength{\columnseprule}{0.4pt}
 
-\begin{multicols}{3}
+\begin{multicols}{4}
 \setlength{\columnsep}{1.5cm}
 
 \begin{itemize}
@@ -289,6 +289,162 @@ int main() {
 } 
 \end{lstlisting}
 
+
+ \section{C++11}
+
+  \subsection{Type inference: `auto`, `decltype`}
+
+  \begin{lstlisting}
+  #include <vector>
+  #include <iostream>
+
+  int main() {
+    std::vector<int> v = {1,2,3,4};
+    for (auto it = v.begin(); it != v.end(); ++it)
+      std::cout << *it << ' ';
+    std::cout << "\n";
+
+    auto sum = 0;            // int
+    decltype(sum) total = 0; // same type as sum
+  }
+  \end{lstlisting}
+
+   \subsection{Range-based for}
+
+  \begin{lstlisting}
+  #include <vector>
+  #include <iostream>
+
+  int main() {
+    std::vector<int> v = {10,20,30};
+    for (auto x : v) std::cout << x << ' ';
+    std::cout << '\n';
+    for (auto &x : v) x += 1; // modify in-place
+  }
+  \end{lstlisting}
+
+  \subsection{Lambda expressions}
+ 
+  \begin{lstlisting}
+  #include <algorithm>
+  #include <vector>
+  #include <iostream>
+
+  int main() {
+    std::vector<int> v = {3,1,2};
+    std::sort(v.begin(), v.end(), [](int a,int b){ return a<b; });
+    std::for_each(v.begin(), v.end(), [](int x){ std::cout << x << ' '; });
+    std::cout << '\n';
+  }
+  \end{lstlisting}
+
+
+   \section{Move Semantics in C++}
+
+  Beginning with C++11, the C++ language introduced \textit{move semantics}, a mechanism enabling efficient transfer of resources from one object to another. Move semantics reduce unnecessary copying of objects that manage heavy resources such as memory buffers, strings, or file handles.
+
+  We provide a detailed and rigorous explanation of move semantics, beginning with value categories and progressing to move constructors, move assignment, and usage recommendations.
+
+  \section{Value Categories and Reference Types}
+
+  Understanding move semantics requires understanding how C++ distinguishes persistent objects from temporary ones.
+
+  \subsection{Lvalues}
+
+  An \textbf{lvalue} refers to an object with a persistent memory location.
+
+  \begin{lstlisting}[language=C++]
+  int x = 10;   // x is an lvalue
+  \end{lstlisting}
+
+  Lvalues bind to lvalue references:
+
+  \begin{lstlisting}[language=C++]
+  T&
+  \end{lstlisting}
+
+  \subsection{Rvalues}
+
+  An \textbf{rvalue} is a temporary expression without a stable address.
+
+  \begin{lstlisting}[language=C++]
+  10                 // rvalue literal
+  x + 5              // rvalue
+  std::string("hi")  // temporary
+  \end{lstlisting}
+
+  Rvalues bind to rvalue references:
+
+  \begin{lstlisting}[language=C++]
+  T&&
+  \end{lstlisting}
+
+  \subsection{Why This Matters}
+
+  Temporaries may be safely “moved from,” enabling efficient resource transfers.
+
+  \section{Move Constructors and Move Assignment}
+
+  Classes that manage resources must implement:
+
+  \begin{itemize}
+    \item \textbf{Move constructor}
+    \item \textbf{Move assignment operator}
+  \end{itemize}
+
+  \subsection{Example Class}
+
+  \begin{lstlisting}[language=C++]
+  class MyString {
+  private:
+    char* data;
+
+  public:
+    // Constructor
+    MyString(const char* s) {
+      size_t n = std::strlen(s) + 1;
+      data = new char[n];
+      std::memcpy(data, s, n);
+    }
+
+    // Destructor
+    ~MyString() {
+      delete[] data;
+    }
+
+    // Copy constructor
+    MyString(const MyString& other) {
+      size_t n = std::strlen(other.data) + 1;
+      data = new char[n];
+      std::memcpy(data, other.data, n);
+    }
+  \end{lstlisting}
+
+  \subsection{Move Constructor}
+
+  \begin{lstlisting}[language=C++]
+    MyString(MyString&& other) noexcept
+      : data(other.data)
+    {
+      other.data = nullptr;
+    }
+  \end{lstlisting}
+
+  \subsection{Move Assignment Operator}
+
+  \begin{lstlisting}[language=C++]
+    MyString& operator=(MyString&& other) noexcept {
+      if (this != &other) {
+        delete[] data;
+        data = other.data;
+        other.data = nullptr;
+      }
+      return *this;
+    }
+  };
+  \end{lstlisting}
+ 
+ 
 \end{multicols}
 
 \end{frame}
