@@ -46,6 +46,7 @@
   \par\vspace{1em}%
   {\noindent\large\bfseries #1\par}%
   \vspace{0.5em}\hrule\vspace{1em}%
+
 }
 \makeatother
 
@@ -249,7 +250,6 @@ int main() {
   \item Use \texttt{lower\_bound} / \texttt{upper\_bound}.
 \end{itemize}
 
-\section{Small Example}
 
 \begin{lstlisting}
 #include <vector>
@@ -297,7 +297,6 @@ int main() {
   \begin{lstlisting}
   #include <vector>
   #include <iostream>
-
   int main() {
     std::vector<int> v = {1,2,3,4};
     for (auto it = v.begin(); it != v.end(); ++it)
@@ -345,7 +344,7 @@ int main() {
 
   We provide a detailed and rigorous explanation of move semantics, beginning with value categories and progressing to move constructors, move assignment, and usage recommendations.
 
-  \section{Value Categories and Reference Types}
+  \subsection{Value Categories and Reference Types}
 
   Understanding move semantics requires understanding how C++ distinguishes persistent objects from temporary ones.
 
@@ -378,9 +377,7 @@ int main() {
   \begin{lstlisting}[language=C++]
   T&&
   \end{lstlisting}
-
-  \subsection{Why This Matters}
-
+  
   Temporaries may be safely “moved from,” enabling efficient resource transfers.
 
   \section{Move Constructors and Move Assignment}
