@@ -7,18 +7,18 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
 \usepackage{multirow}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage[utf8]{inputenc}
 
 \setlength{\paperwidth}{36in}
 \setlength{\paperheight}{48in}
 \setlength{\topmargin}{-0.5in}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{multicol}
-\usepackage{listings}
-\usepackage{xcolor}
 
 \definecolor{lightgray}{gray}{0.95}
 
@@ -28,41 +28,36 @@
     columns=fullflexible,
     frame=single,
     backgroundcolor=\color{lightgray},
-  % rulecolor=\color{black},
-  % tabsize=4,
-  showspaces=false,
-   showstringspaces=false,
-    language=c++,
-     literate={'}{{'}}1
-} 
-
+    showspaces=false,
+    showstringspaces=false,
+    language=C++,
+    mathescape=false
+}
+% -------------------------------
+% FIXED custom section/subsection
+% -------------------------------
 \makeatletter
 \renewcommand{\section}[1]{%
   \par\vspace{1em}%
-  {\noindent\usebeamerfont{section title}\Large\bfseries #1\par}%
+  {\noindent\Large\bfseries #1\par}%
   \vspace{0.5em}\hrule\vspace{1em}%
 }
-\makeatletter
-
-\makeatletter
 \renewcommand{\subsection}[1]{%
   \par\vspace{1em}%
-  {\noindent\usebeamerfont{subsection title}\large\bfseries #1\par}%
+  {\noindent\large\bfseries #1\par}%
   \vspace{0.5em}\hrule\vspace{1em}%
 }
-\makeatletter
+\makeatother
 
+\title{C++ QUICK REFERENCE}
 
-
-
-\title{C++ QUICK REFERENCE }
 %\author{CS 3911}
 \begin{document}
 
 %\section*{C++ Reference Card}
 
 
-\begin{frame}[t,fragile]{C++98}
+\begin{frame}[t,fragile]{C++98} 
 %\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
 \setlength{\columnseprule}{0.4pt}  % thickness of line
 
@@ -335,6 +330,10 @@ char* cPtr;
 cPtr = &c;
 \end{lstlisting}
 Use the indirection operator (*) to access or change the value that the pointer references.
+    \begin{center}
+        \includegraphics[width=\linewidth]{pointer.png}
+    \end{center}
+
 Example:
 \begin{lstlisting}
 // continued from example above
@@ -959,6 +958,7 @@ p2.print();
 \end{frame}
 
 \begin{frame}{STL}
+  \vfill
 \setlength{\columnseprule}{0.4pt}  % thickness of line
 
 \begin{multicols}{3}[\setlength{\columnsep}{1.5cm}]
@@ -977,6 +977,10 @@ p2.print();
 
 \subsection{\texttt{std::vector}}
 Dynamic contiguous array; random-access iterators; good default choice for many tasks.
+
+    \begin{center}
+        \includegraphics[width=\linewidth]{vector.png}
+    \end{center}
 
 \begin{lstlisting}
 #include <vector>
@@ -1055,7 +1059,7 @@ The hash-based associative containers \texttt{unordered\_map} and \texttt{unorde
 
 Associative containers often use \texttt{std::pair<key,value>} when inserting or returning key/value pairs. Example inserting into a \texttt{std::map} using \texttt{std::make\_pair}:
 
-\begin{lstlisting}
+\begin{lstlisting}[mathescape=false]
 #include <map>
 #include <string>
 #include <utility> // std::pair, std::make_pair
@@ -1069,10 +1073,10 @@ int main() {
   for (std::map<std::string,int>::const_iterator it = ages.begin(); it != ages.end(); ++it)
     std::cout << it->first << ": " << it->second << '\n';
 
-  // If your implementation provides unordered_map (non-standard in C++98):
-  // #include <tr1/unordered_map> or <unordered_map> (C++11)
-  // std::tr1::unordered_map<std::string,int> um;
-  // um["Alice"] = 30;
+  // If your implementation provides unordered_map :
+   #include <unordered_map> 
+   std::unordered_map<std::string,int> um;
+  um["Alice"] = 30;
 }
 \end{lstlisting}
 
@@ -1170,24 +1174,36 @@ struct SquareFunctor { int operator()(int x) const { return x * x; } };
 
 int main() {
     std::vector<int> v;
-    for (int i = 1; i <= 5; ++i) v.push_back(i);
+    for (int i = 1; i <= 5; ++i) 
+          v.push_back(i);
 
     std::vector<int> sq(v.size());
-    std::transform(v.begin(), v.end(), sq.begin(), SquareFunctor());
+    std::transform(v.begin(), v.end(), 
+                        sq.begin(), SquareFunctor());
 
     int sum = std::accumulate(sq.begin(), sq.end(), 0);
     std::cout << "sum of squares = " << sum << '\n';
 
     std::vector<std::string> words;
-    words.push_back("apple"); words.push_back("kiwi"); words.push_back("banana");
+      words.push_back("apple");
+      words.push_back("kiwi");
+      words.push_back("banana");
     std::map<int,int> freq;
-    for (std::vector<std::string>::const_iterator it = words.begin(); it != words.end(); ++it)
+    for (std::vector<std::string>::const_iterator it =
+                          words.begin(); it != words.end(); ++it)
         ++freq[it->size()];
 
-    for (std::map<int,int>::const_iterator it = freq.begin(); it != freq.end(); ++it)
-        std::cout << "length " << it->first << ": " << it->second << " word(s)\n";
-}
+    for (std::map<int,int>::const_iterator it = freq.begin();
+                         it != freq.end(); ++it)
+        std::cout << "length " << it->first 
+                << ": " << it->second << " word(s)\n";
+} 
 \end{lstlisting}
+
+
+
+
+
 \end{multicols}
 \end{frame}
 
