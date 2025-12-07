@@ -1,0 +1,1194 @@
+\documentclass[final]{beamer}
+
+\usepackage[scale=1.0]{beamerposter}
+\usetheme{confposter}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{multirow}
+
+\setlength{\paperwidth}{36in}
+\setlength{\paperheight}{48in}
+\setlength{\topmargin}{-0.5in}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{lightgray}{gray}{0.95}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    columns=fullflexible,
+    frame=single,
+    backgroundcolor=\color{lightgray},
+  % rulecolor=\color{black},
+  % tabsize=4,
+  showspaces=false,
+   showstringspaces=false,
+    language=c++,
+     literate={'}{{'}}1
+} 
+
+\makeatletter
+\renewcommand{\section}[1]{%
+  \par\vspace{1em}%
+  {\noindent\usebeamerfont{section title}\Large\bfseries #1\par}%
+  \vspace{0.5em}\hrule\vspace{1em}%
+}
+\makeatletter
+
+\makeatletter
+\renewcommand{\subsection}[1]{%
+  \par\vspace{1em}%
+  {\noindent\usebeamerfont{subsection title}\large\bfseries #1\par}%
+  \vspace{0.5em}\hrule\vspace{1em}%
+}
+\makeatletter
+
+
+
+
+\title{C++ QUICK REFERENCE }
+%\author{CS 3911}
+\begin{document}
+
+%\section*{C++ Reference Card}
+
+
+\begin{frame}[t,fragile]{C++98}
+%\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+
+% ---------------- Column 1 ----------------
+%\begin{column}{0.22\paperwidth}
+
+%%begin{block}
+\vspace{-1cm}
+\section{Preprocessor}
+\vspace{-1cm}
+%begin{block}
+\begin{lstlisting}[language=C++]
+// Comment to end of line
+/* Multi-line comment */
+#include <stdio.h>         // Insert standard header file
+#include "myfile.h"         // Insert file in current directory
+#define X some text         // Replace X with some text
+#define F(a,b) a+b          // Replace F(1,2) with 1+2
+#define X \
+ some text                 // Multiline definition
+#undef X                    // Remove definition
+#if defined(X)              // Conditional compilation (#ifdef X)
+#else                       // Optional (#ifndef X or #if !defined(X))
+#endif                      // Required after #if, #ifdef
+\end{lstlisting}
+%\end{block}
+
+ \vspace{-1cm}
+\section{Data Types}
+\vspace{-1cm}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Data Type} & \textbf{Description} \\
+\hline
+bool & boolean (true or false) \\
+\hline
+char & character ('a', 'b', etc.) \\
+\hline
+char[] & character array (C-style string  \\
+ & if null terminated) \\
+\hline
+string & C++ string (from the STL) \\
+\hline
+int & Integer (1, 2, -1, 1000, etc.) \\
+\hline
+long int & long integer \\
+\hline
+float & single precision floating point \\
+\hline
+double & double precision floating point \\
+\hline
+\end{tabular}
+
+These are the most commonly used types: this is not a complete list.
+%%\end{block}
+
+%begin{block}
+ 
+\section{Operators}
+The most commonly used operators in order of precedence:
+\begin{enumerate}
+    \item $++(\text{post-increment}), --(\text{post-decrement})$
+    \item $!(\text{not}), ++ (\text{pre-increment}), -- (\text{pre-decrement})$
+    \item $* / , \% (\text{modulus})$
+    \item $+-$
+    \item $<, <=, >, >=\text{}$
+    \item $==(\text{equal-to}), != (\text{not-equal-to})$
+    \item $\&\&$ (and)
+    \item $||$ (or)
+    \item $= (\text{assignment}), * , / , \%= , +=, -= $
+\end{enumerate}
+%\end{block}
+
+
+\section{Looping}
+
+%\begin{sectionblock}{Loops}
+%\end{sectionblock}
+%begin{block}
+ 
+\subsection{while Loop}
+\begin{lstlisting}
+while (expression)
+  statement;
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+while (x < 100)
+  cout << x++ << endl;
+\end{lstlisting}
+\begin{lstlisting}
+while (expression){
+  statement;
+  statement;
+}
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+while (x < 100){
+  cout << x << endl;
+  x++;
+}
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+
+\subsection{do-while Loop}
+\begin{lstlisting}
+do
+  statement;
+while (expression);
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+do
+  cout << x++ << endl;
+while (x < 100);
+\end{lstlisting}
+\begin{lstlisting}
+do{
+  statement;
+  statement;
+} while (expression);
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+do {
+  cout << x << endl;
+  x++;
+} while (x < 100);
+\end{lstlisting}
+%\end{block}
+
+%\end{column}
+
+% ---------------- Column 2 ----------------
+%\begin{column}{0.3\paperwidth}
+\subsection{For Loop}
+%begin{block}
+
+%\begin{tabular}{l | l}
+
+%\begin{minipage}{0.45\linewidth}
+
+\begin{lstlisting}
+for (initialization; test; update)
+  statement;
+\end{lstlisting}
+
+\begin{lstlisting}
+for (initialization; test; update){
+  statement;
+  statement;
+}
+\end{lstlisting}
+
+
+%\end{minipage}
+%&
+%\begin{minipage}{0.45\linewidth}
+
+%\end{column}
+% ---------------- Column 2 ----------------
+%\begin{column}{0.23\paperwidth}
+
+{\it Example:}
+
+\begin{lstlisting}
+for (count = 0; count < 10; count++) {
+  cout << "count equals: " << count << endl;
+  
+}
+\end{lstlisting}
+
+%\end{minipage}
+
+%\end{tabular}
+%\end{block}
+
+
+
+%\end{column}
+% ---------------- Column 2 ----------------
+%\begin{column}{0.3\paperwidth}
+
+%%begin{block}
+\vspace{-1.5cm}
+ \subsection{ Decision Statements}
+%%\end{block}
+\vspace{-1.5cm}
+
+
+
+%begin{block}
+ 
+\subsection{if}
+\begin{lstlisting}
+if (expression)
+  statement;
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+if (x < y)
+  cout << x;
+\end{lstlisting}
+%\end{block}
+
+
+
+
+%begin{block}
+ 
+\subsection{if/else}
+\begin{lstlisting}
+if (expression)
+  statement;
+else
+  statement;
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+if (x < y)
+  cout << x;
+else
+  cout << y;
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ 
+\subsection{switch/case}
+\begin{lstlisting}
+switch(int expression)
+{
+  case int-constant:
+    statement(s);
+    break;
+  case int-constant:
+    statement(s);
+    break;
+  default:
+    statement;
+}
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+switch(choice)
+{ 
+  case 0:
+    cout << "Zero";
+    break;
+  case 1:
+    cout << "One";
+    break;
+  default:
+    cout << "What?";
+}
+\end{lstlisting}
+%\end{block}
+
+\section{Pointers}
+A pointer variable (or just pointer) is a variable that stores a memory address. Pointers allow the indirect manipulation of data stored in memory. Pointers are declared using *. To set a pointer's value to the address of another variable, use the \& operator.
+Example:
+\begin{lstlisting}
+char c = 'a';
+char* cPtr;
+cPtr = &c;
+\end{lstlisting}
+Use the indirection operator (*) to access or change the value that the pointer references.
+Example:
+\begin{lstlisting}
+// continued from example above
+*cPtr = 'b';
+cout << *cPtr << endl; // prints the char b
+// prints the char b
+\end{lstlisting}
+
+Array names can be used as constant pointers, and pointers can be used as array names.
+Example:
+\begin{lstlisting}
+int numbers[] = {10, 20, 30, 40, 50};
+int* numPtr = numbers;
+cout << numbers[0] << endl; // prints 10
+cout << *numPtr << endl;    // prints 10
+cout << numbers[1] << endl; // prints 20
+cout << *(numPtr + 1) << endl; // prints 20
+cout << numPtr[2] << endl;  // prints 30
+\end{lstlisting}
+%%\end{block}
+\vspace{-1.5cm}
+\section{Dynamic Memory}
+\vspace{-1.5cm}
+
+%begin{block}
+ \subsection{ Allocate Memory}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Syntax} & \textbf{Examples} \\
+\hline
+ptr = new type; & int* iPtr; \\
+ & iPtr = new int; \\
+\hline
+ptr = new type [size]; & int* intArray; \\
+ & intArray = new int[5]; \\
+\hline
+\end{tabular}
+%\end{block}
+
+%begin{block}
+ %\end{column}
+%\begin{column}{0.23\paperwidth}
+
+\subsection{Deallocate Memory}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Syntax} & \textbf{Examples} \\
+\hline
+delete ptr; & delete iPtr; \\
+\hline
+delete [] ptr; & delete [] intArray; \\
+\hline
+\end{tabular}
+
+Once a pointer is used to allocate the memory for an array, array notation can be used to access the array locations.
+Example:
+\begin{lstlisting}
+int* intArray;
+intArray = new int[5];
+intArray[0] = 23;
+intArray[1] = 32;
+\end{lstlisting}
+%\end{block}
+\section{I/O}
+%begin{block}
+ \subsection{ Console Input/Output}
+\begin{itemize}
+    \item \texttt{cout <<} console out, printing to screen
+    \item \texttt{cin >>} console in, reading from keyboard
+    \item \texttt{cerr <<} console error
+\end{itemize}
+Example:
+\begin{lstlisting}
+cout << "Enter an integer: ";
+cin >> i;
+cout << "Input: " << i << endl;
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{ File Input/Output}
+Example (input):
+\begin{lstlisting}
+ifstream inputFile;
+inputFile.open("data.txt");
+inputFile >> inputVariable;
+// you can also use get (char) or
+// getline (entire line) in addition to >>
+inputFile.close();
+\end{lstlisting}
+Example (output):
+\begin{lstlisting}
+ofstream outFile;
+outFile.open("output.txt");
+outFile << outputVariable;
+outFile.close();
+\end{lstlisting}
+%\end{block}
+\section{Function}
+%begin{block}
+ \subsection{Functions}
+Functions return at most one value. A function that does not return a value has a return type of \texttt{void}. Values needed by a function are called parameters.
+\begin{lstlisting}
+return_type function(type p1, type p2,...)
+{
+  statement;
+  statement;
+}
+\end{lstlisting}
+Examples:
+\begin{lstlisting}
+int timesTwo(int v) {
+  int d;
+  d = v * 2;
+  return d;
+}
+void printCourseNumber() {
+  cout << "CS 3911" << endl;
+  return;
+}
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Passing Parameters by Value}
+\begin{lstlisting}
+return_type function(type p1)
+\end{lstlisting}
+Variable is passed into the function but changes to \texttt{p1} are not passed back.
+%\end{block}
+
+%begin{block}
+ \subsection{Passing Parameters by Reference}
+\begin{lstlisting}
+return_type function(type &p1)
+\end{lstlisting}
+Variable is passed into the function and changes to \texttt{p1} are passed back.
+%\end{block}
+
+
+%begin{block}
+ \subsection{Default Parameter Values}
+\begin{lstlisting}
+return_type function(type p1=val)
+\end{lstlisting}
+\texttt{val} is used as the value of \texttt{p1} if the function is called without a parameter.
+%\end{block}
+%\end{column}
+% ---------------- Column 3 ----------------
+%\begin{column}{0.23\paperwidth}
+%begin{block}
+\vspace{-1.cm}
+ \subsection{Struct/Classes}
+ \vspace{-1.cm}
+%\end{block}
+%begin{block}
+%\end{block}
+
+%begin{block}
+ %\subsection{Declaration}
+\begin{lstlisting}
+class classname {
+public:
+  classname (params); // constructor
+  ~classname(); // destructor
+  type member1;
+  type member2;
+protected:
+  type member3;
+private:
+  type member4;
+};
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+class Square {
+public:
+  Square();
+  Square (float w);
+  void setWidth(float w);
+  float getArea();
+private:
+  float width;
+};
+\end{lstlisting}
+\begin{itemize}
+    \item \texttt{public} members are accessible from anywhere the class is visible.
+    \item \texttt{private} members are only accessible from the same class or a friend (function or class).
+    \item \texttt{protected} members are accessible from the same class, derived classes, or a friend (function or class).
+    \item constructors may be overloaded just like any other function. You can define two or more constructors as long as each constructor has a different parameter list.
+\end{itemize}
+%\end{block}
+
+%begin{block}
+ \subsection{Definition of Member Functions}
+\begin{lstlisting}
+return_type classname::functionName (params) {
+  statements;
+}
+\end{lstlisting}
+Examples:
+\begin{lstlisting}
+Square::Square() {
+  width = 0;
+}
+void Square::setWidth(float w) {
+  if (w >= 0)
+    width = w;
+  else
+    exit(-1);
+}
+float Square::getArea() {
+  return width * width;
+}
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Definition of Instances}
+\begin{lstlisting}
+classname varName;
+classname* ptrName;
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+Square s1();
+Square s2(3.5);
+Square* sPtr;
+sPtr = new Square (1.8);
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Accessing Members}
+\begin{lstlisting}
+varName.member = val;
+varName.member();
+ptrName->member = val;
+ptrName->member();
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+s1.setWidth(1.5);
+cout << s1.getArea();
+cout << sPtr->getArea();
+\end{lstlisting}
+%\end{block}
+%\end{column}
+%\end{columns}
+\end{multicols}
+\end{frame}
+\begin{frame}[t,fragile]{OOP, Templates, Exceptions}
+
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+
+%\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+
+% ---------------- Column 1 ----------------
+%\begin{column}{0.22\paperwidth}
+%begin{block}
+
+ \subsection{OOP Principles}
+\textbf{Encapsulation:} Hide internal implementation details by using access specifiers (\texttt{public}, \texttt{private}, \texttt{protected}) to control access to member variables and functions.
+
+\textbf{Abstraction:} Define interfaces that represent only essential features while hiding complexity. Use abstract classes with pure virtual functions.
+%\end{block}
+
+%begin{block}
+
+ \subsection{Inheritance}
+Inheritance allows a new class to be based on an existing class. The new class inherits all the member variables and functions (except the constructors and destructor) of the class it is based on.
+
+Example:
+\begin{lstlisting}
+class Student
+{
+public:
+  Student (string n, string id);
+  void print();
+protected:
+  string name;
+  string netID;
+};
+class GradStudent : public Student
+{
+public:
+  GradStudent(string n, string id, string prev);
+  void print();
+protected:
+  string prevDegree;
+};
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Visibility of Members after Inheritance}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multirow{2}{*}{Inheritance Specification} & \multicolumn{3}{c|}{Access Specifier in Base Class} \\
+\cline{2-4}
+ & private & protected & public \\
+\hline
+private & private & private & private \\
+\hline
+protected & protected & protected & protected \\
+\hline
+public & protected & protected & public \\
+\hline
+\end{tabular}
+%\end{block}
+
+\subsection{Multiple Inheritance}
+Multiple inheritance allows a class to inherit from more than one base class. Useful for mixing interfaces/behaviors, but watch for ambiguity and the diamond problem.
+
+\begin{lstlisting}[language=C++]
+class A { public: void f() {} };
+class B { public: void g() {} };
+class C : public A, public B { };
+// C has both A::f and B::g
+\end{lstlisting}
+
+Ambiguities arise when multiple bases provide the same member name:
+\begin{lstlisting}[language=C++]
+class A { public: void x(); };
+class B { public: void x(); };
+class C : public A, public B { };
+// call must be qualified: c.A::x(); or c.B::x();
+\end{lstlisting}
+
+	\textbf{Diamond problem:} When two base classes share a common base, the derived may contain multiple subobjects of the common base.
+Use virtual inheritance to ensure only one shared base subobject:
+\begin{lstlisting}[language=C++]
+class Top { public: int v; };
+class Left : virtual public Top { };
+class Right: virtual public Top { };
+class Bottom: public Left, public Right { };
+// Bottom has one Top subobject when Left/Right inherit virtually
+\end{lstlisting}
+
+Notes:
+- Virtual inheritance adds complexity to constructors: explicitly initialize the virtual base in the most-derived class.
+- Ambiguous member names must be qualified with the base class name.
+- Prefer composition or interfaces (pure virtual classes) when multiple inheritance is only used for code reuse.
+%begin{block}
+ \subsection{Polymorphism}
+\textbf{Compile-time (Static) Polymorphism:} Function overloading and templates.
+
+\textbf{Runtime (Dynamic) Polymorphism:} Use virtual functions to allow derived classes to override base class methods. Write code that works with base class pointers/references to handle derived classes dynamically.
+
+\textbf{Example:}
+\begin{lstlisting}
+class Shape // Abstract class
+{
+public:
+  virtual void draw() = 0; // pure virtual
+  virtual double area() = 0;
+  virtual ~Shape() {}
+};
+
+class Circle : public Shape
+{
+public:
+  void draw() { /* implementation */ }
+  double area() { return 3.14 * r * r; }
+private:
+  double r;
+};
+
+Shape* shapes[10];
+shapes[0] = new Circle();
+shapes[0]->draw(); // calls Circle::draw()
+\end{lstlisting}
+%\end{block}
+
+
+\subsection{Rule of Three:} 
+If a class defines a destructor, copy constructor, or copy-assignment, it probably needs all three. %begin{block}
+
+Example 
+\begin{lstlisting}
+
+class MyVector {
+public:
+    MyVector(int n) : size(n), data(new int[n]) {}
+    ~MyVector() { delete[] data; }
+
+    // Copy constructor
+    MyVector(const MyVector& other) : size(other.size), data(new int[other.size]) {
+        for (int i = 0; i < size; ++i)
+            data[i] = other.data[i];
+    }
+
+    // Copy assignment operator
+    MyVector& operator=(const MyVector& other) {
+        if (this != &other) {
+            delete[] data;
+            size = other.size;
+            data = new int[size];
+            for (int i = 0; i < size; ++i)
+                data[i] = other.data[i];
+        }
+        return *this;
+    }
+
+    int& operator[](int i) { return data[i]; }
+    int sizeOf() const { return size; }
+
+private:
+    int size;
+    int* data;
+};
+\end{lstlisting}
+
+ \subsection{Operator Overloading}
+C++ allows you to define how standard operators (+, -, *, etc.) work with classes that you write. For example, to use the operator $+$ with your class, you would write a function named \texttt{operator+} for your class.
+Example:
+Prototype for a function that overloads $+$ for the \texttt{Square} class:
+\begin{lstlisting}
+Square operator+ (const Square &);
+\end{lstlisting}
+
+%\end{column}
+% ---------------- Column 2 ----------------
+%\begin{column}{0.23\paperwidth}
+If the object that receives the function call is not an instance of a class that you wrote,
+ write the function as a \texttt{friend} of your class. This is standard practice for overloading \texttt{<<} and \texttt{>>}.
+
+
+
+
+
+
+Example:
+Prototype for a function that overloads \texttt{<<} for the \texttt{Square} class:
+\begin{lstlisting}
+friend ostream & operator<<
+  (ostream &, const Square &);
+\end{lstlisting}
+Make sure the return type of the overloaded function matches what C++ programmers expect. The return type of relational operators $(<, >, ==, \text{etc.})$ should be \texttt{bool}, the return type of \texttt{<<} should be \texttt{ostream \&}, etc.
+%\end{block}
+
+\textbf{Complete Example:}
+
+\begin{lstlisting}
+  #include <iostream>
+
+class Complex {
+public:
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+    ~Complex() {}
+
+    // Copy constructor
+    Complex(const Complex& other) : real(other.real), imag(other.imag) {}
+
+    // Copy assignment operator
+    Complex& operator=(const Complex& other) {
+        if (this != &other) {
+            real = other.real;
+            imag = other.imag;
+        }
+        return *this;
+    }
+
+    // Addition operator
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
+
+    // Print function
+    void print() const {
+        std::cout << real << " + " << imag << "i" << std::endl;
+    }
+
+private:
+    double real, imag;
+};
+
+// Usage example:
+// Complex a(1.0, 2.0), b(3.0, 4.0);
+// Complex c = a + b;
+// c.print(); // Output: 4 + 6i
+\end{lstlisting}
+
+
+
+
+\subsection{Namespaces}
+Namespace usage prevents name collisions. Avoid `using namespace std;` in headers.
+\begin{lstlisting}[language=C++]
+namespace N { class T {}; } //create a namespace
+N::T t;
+using namespace N; // ok in implementation units, avoid in headers
+\end{lstlisting}
+
+
+
+%begin{block}
+ \subsection{Exceptions}
+Example:
+\begin{lstlisting}
+try
+{
+  // code here calls functions that might
+  // throw exceptions
+  quotient = divide (num1, num2);
+
+  // or this code might test and throw
+  // exceptions directly
+  if (num3 < 0)
+    throw -1; // exception to be thrown can
+              // be a value or an object
+}
+catch (int)
+{
+  cout << "num3 can not be negative!";
+  exit(-1);
+}
+catch (char* exceptionString)
+{
+  cout << exceptionString;
+  exit(-2);
+}
+// add more catch blocks as needed
+\end{lstlisting}
+%\end{block}
+\section{Template}
+Templates in C++ allow you to write generic and reusable code for functions and classes. They enable the creation of code that works with any data type, reducing duplication and increasing flexibility.
+%begin{block}
+ \subsection{Function Templates}
+Example:
+\begin{lstlisting}
+template <class T>
+T getMax(T a, T b)
+{
+  if (a > b)
+    return a;
+  else
+    return b;
+}
+\end{lstlisting}
+Example calls:
+\begin{lstlisting}
+int a = 9, b = 2, c;
+c = getMax(a, b);
+float f = 5.3, g = 9.7, h;
+h = getMax(f, g);
+\end{lstlisting}
+%\end{block}
+
+
+\subsection{Class Templates}
+Class templates define parameterized types. Define member functions inside the class or provide out-of-class definitions with the `template<>` prefix.
+\begin{lstlisting}[language=C++]
+template <class T>
+class Point {
+public:
+  Point(T x, T y) : x(x), y(y) {}
+  T getX() const { return x; }
+  T getY() const { return y; }
+private:
+  T x, y;
+};
+
+Point<int> p(3,4);
+std::cout << p.getX() << "," << p.getY() << std::endl;
+\end{lstlisting}
+
+Specialization example (full specialization):
+\begin{lstlisting}[language=C++]
+template <>
+class Point<char> {
+  // specialized implementation for char
+};
+\end{lstlisting}
+
+Notes:
+\begin{itemize}
+ \item When defining member functions outside the class body, repeat the `template <...>` header.
+\item Class templates can be partially specialized (for classes), but not for functions in C++98.
+\item  Prefer simple interfaces; templates increase compile-time and complexity.
+\end{itemize}
+%begin{block}
+
+Another Example
+\begin{lstlisting}
+template <class T>
+class Point
+{
+public:
+  Point(T x, T y);
+  void print();
+  double distance (Point<T> p);
+private:
+  T x;
+  T y;
+};
+//usage
+Point<int> p1(3, 2);
+Point<float> p2(3.5, 2.5); 
+p1.print();
+p2.print();
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Suggested Websites}
+\begin{itemize}
+    \item C++ Reference: \texttt{http://www.cppreference.com/}
+    \item C++ Tutorial: \texttt{http://www.cplusplus.com/doc/tutorial/}
+\end{itemize}
+%Developed for Mississippi State University's CSE1284 and CSE1384 courses.
+%Download the latest version from \texttt{http://cse.msstate.edu/~crumpton/reference}.  
+%February 17, 2009.
+%\end{block}
+
+%\end{column}
+
+%\end{columns}
+\end{multicols}
+\end{frame}
+
+\begin{frame}{STL}
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{3}[\setlength{\columnsep}{1.5cm}]
+  
+\begin{itemize}
+  \item Containers: store collections (\texttt{vector}, \texttt{list}, \texttt{map}, \texttt{set}, \texttt{deque}, ...)
+  \item Iterators: traverse containers (input, forward, bidirectional, random-access)
+  \item Algorithms: operate on iterator ranges (\texttt{sort}, \texttt{find}, \texttt{for\_each}, ...)
+  \item Functors: objects that behave like functions (implement \texttt{operator()}), and adapters (\texttt{stack}, \texttt{queue})
+\end{itemize}
+
+
+
+
+
+
+\subsection{\texttt{std::vector}}
+Dynamic contiguous array; random-access iterators; good default choice for many tasks.
+
+\begin{lstlisting}
+#include <vector>
+#include <iostream>
+
+int main() {
+    std::vector<int> v;
+    for (int i = 0; i < 5; ++i) v.push_back(i*10);
+
+    for (std::vector<int>::size_type i = 0; i < v.size(); ++i)
+        std::cout << v[i] << " ";
+    std::cout << '\n';
+
+    for (std::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
+        std::cout << *it << " ";
+    std::cout << '\n';
+}
+\end{lstlisting}
+
+\subsection{\texttt{std::list}}
+Doubly-linked list: O(1) insert/erase given an iterator; stable iterators but no random access.
+
+\begin{lstlisting}
+#include <list>
+#include <iostream>
+
+int main() {
+    std::list<int> L;
+    L.push_back(1); L.push_back(2); L.push_back(3);
+    for (std::list<int>::const_iterator it = L.begin(); it != L.end(); ++it)
+        std::cout << *it << " ";
+}
+\end{lstlisting}
+
+\subsection{Associative containers: \texttt{map}, \texttt{set}}
+Ordered containers using keys (typically implemented as balanced trees), with O(log n) lookup/insert.
+
+\begin{lstlisting}
+#include <map>
+#include <string>
+#include <iostream>
+
+int main() {
+    std::map<std::string, int> ages;
+    ages["Alice"] = 30;
+    ages["Bob"] = 25;
+
+    for (std::map<std::string,int>::const_iterator it = ages.begin(); it != ages.end(); ++it)
+        std::cout << it->first << ": " << it->second << '\n';
+}
+\end{lstlisting}
+
+\subsection{Container adapters: \texttt{queue}, \texttt{stack}, \texttt{priority\_queue}}
+Adapters provide restricted interfaces on top of other containers (default underlying container is usually \texttt{deque}).
+
+\begin{lstlisting}
+#include <queue>
+#include <iostream>
+
+int main() {
+  std::queue<int> q;
+  q.push(1);
+  q.push(2);
+  q.push(3);
+
+  while (!q.empty()) {
+    std::cout << q.front() << " ";
+    q.pop();
+  }
+  std::cout << '\n';
+}
+\end{lstlisting}
+
+\subsection{Unordered maps and \texttt{std::pair}}
+The hash-based associative containers \texttt{unordered\_map} and \texttt{unordered\_set} are not part of the C++98 standard. Some compilers/libraries provide them as extensions (e.g. TR1 or vendor/hash extensions). In portable C++98 code prefer \texttt{std::map}/\texttt{std::set}.
+
+Associative containers often use \texttt{std::pair<key,value>} when inserting or returning key/value pairs. Example inserting into a \texttt{std::map} using \texttt{std::make\_pair}:
+
+\begin{lstlisting}
+#include <map>
+#include <string>
+#include <utility> // std::pair, std::make_pair
+#include <iostream>
+
+int main() {
+  std::map<std::string,int> ages;
+  ages.insert(std::make_pair(std::string("Alice"), 30));
+  ages.insert(std::make_pair(std::string("Bob"), 25));
+
+  for (std::map<std::string,int>::const_iterator it = ages.begin(); it != ages.end(); ++it)
+    std::cout << it->first << ": " << it->second << '\n';
+
+  // If your implementation provides unordered_map (non-standard in C++98):
+  // #include <tr1/unordered_map> or <unordered_map> (C++11)
+  // std::tr1::unordered_map<std::string,int> um;
+  // um["Alice"] = 30;
+}
+\end{lstlisting}
+
+\section{Iterators}
+Iterators decouple algorithms from container implementations. Use \texttt{const\_iterator} when you don't modify elements.
+
+\begin{lstlisting}
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+int main() {
+    std::vector<int> v;
+    v.push_back(3); v.push_back(1); v.push_back(2);
+    std::sort(v.begin(), v.end());
+    for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
+        std::cout << *it << ' ';
+}
+\end{lstlisting}
+
+\section{Algorithms}
+Algorithms work on iterator ranges \texttt{[first,last)}. Common algorithms include \texttt{sort}, \texttt{find}, \texttt{remove}, \texttt{transform}, and (from \texttt{<numeric>}) \texttt{accumulate}.
+
+\subsection{Remove-Erase Idiom}
+
+\begin{lstlisting}
+#include <vector>
+#include <algorithm>
+
+int main() {
+    std::vector<int> v;
+    v.push_back(1); v.push_back(2); v.push_back(3); v.push_back(2);
+    v.erase(std::remove(v.begin(), v.end(), 2), v.end());
+}
+\end{lstlisting}
+
+\subsection{Transform and Accumulate ( use functors)}
+
+\begin{lstlisting}
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <iostream>
+
+struct Square { int operator()(int x) const { return x*x; } };
+
+int main() {
+    std::vector<int> v;
+    v.push_back(1); v.push_back(2); v.push_back(3);
+    std::vector<int> squares(v.size());
+    std::transform(v.begin(), v.end(), squares.begin(), Square());
+    int sum = std::accumulate(squares.begin(), squares.end(), 0);
+    std::cout << "sum = " << sum << '\n';
+}
+\end{lstlisting}
+
+\section{Functors and Comparators}
+Functors are lightweight and can hold state; they replace lambdas in C++98.
+
+\begin{lstlisting}
+#include <string>
+#include <vector>
+#include <algorithm>
+
+struct ByLength {
+    bool operator()(const std::string& a, const std::string& b) const {
+        return a.size() < b.size();
+    }
+};
+
+int main() {
+    std::vector<std::string> v;
+    v.push_back("apple"); v.push_back("kiwi"); v.push_back("banana");
+    std::sort(v.begin(), v.end(), ByLength());
+}
+\end{lstlisting}
+
+\section{Useful Idioms}
+\begin{itemize}
+  \item Use \texttt{reserve()} on \texttt{vector} when size is known.
+  \item Pass large containers by \texttt{const \&} to avoid copies.
+  \item Use \texttt{lower\_bound} / \texttt{upper\_bound} on sorted ranges.
+\end{itemize}
+
+\section{Small Example: multiple STL parts}
+\begin{lstlisting}
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <numeric>
+#include <map>
+#include <string>
+ 
+struct SquareFunctor { int operator()(int x) const { return x * x; } };
+
+int main() {
+    std::vector<int> v;
+    for (int i = 1; i <= 5; ++i) v.push_back(i);
+
+    std::vector<int> sq(v.size());
+    std::transform(v.begin(), v.end(), sq.begin(), SquareFunctor());
+
+    int sum = std::accumulate(sq.begin(), sq.end(), 0);
+    std::cout << "sum of squares = " << sum << '\n';
+
+    std::vector<std::string> words;
+    words.push_back("apple"); words.push_back("kiwi"); words.push_back("banana");
+    std::map<int,int> freq;
+    for (std::vector<std::string>::const_iterator it = words.begin(); it != words.end(); ++it)
+        ++freq[it->size()];
+
+    for (std::map<int,int>::const_iterator it = freq.begin(); it != freq.end(); ++it)
+        std::cout << "length " << it->first << ": " << it->second << " word(s)\n";
+}
+\end{lstlisting}
+\end{multicols}
+\end{frame}
+
+\end{document}
