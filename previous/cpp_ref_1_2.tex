@@ -1,0 +1,653 @@
+\documentclass[final]{beamer}
+
+\usepackage[scale=1.0]{beamerposter}
+\usetheme{confposter}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{multirow}
+
+\setlength{\paperwidth}{36in}
+\setlength{\paperheight}{48in}
+\setlength{\topmargin}{-0.5in}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{lightgray}{gray}{0.95}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    columns=fullflexible,
+    frame=single,
+    backgroundcolor=\color{lightgray},
+  % rulecolor=\color{black},
+  % tabsize=4,
+  showspaces=false,
+   showstringspaces=false,
+    language=c++,
+     literate={'}{{'}}1
+} 
+
+\makeatletter
+\renewcommand{\section}[1]{%
+  \par\vspace{1em}%
+  {\noindent\usebeamerfont{section title}\Large\bfseries #1\par}%
+  \vspace{0.5em}\hrule\vspace{1em}%
+}
+\makeatletter
+
+\makeatletter
+\renewcommand{\subsection}[1]{%
+  \par\vspace{1em}%
+  {\noindent\usebeamerfont{subsection title}\large\bfseries #1\par}%
+  \vspace{0.5em}\hrule\vspace{1em}%
+}
+\makeatletter
+
+
+
+
+\title{C++ QUICK REFERENCE }
+%\author{CS 3911}
+\begin{document}
+
+%\section*{C++ Reference Card}
+
+
+\begin{frame}[t,fragile]{C++98}
+%\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+
+% ---------------- Column 1 ----------------
+%\begin{column}{0.22\paperwidth}
+
+%%begin{block}
+\vspace{-1cm}
+\section{Preprocessor}
+\vspace{-1cm}
+%begin{block}
+\begin{lstlisting}[language=C++]
+// Comment to end of line
+/* Multi-line comment */
+#include <stdio.h>         // Insert standard header file
+#include "myfile.h"         // Insert file in current directory
+#define X some text         // Replace X with some text
+#define F(a,b) a+b          // Replace F(1,2) with 1+2
+#define X \
+ some text                 // Multiline definition
+#undef X                    // Remove definition
+#if defined(X)              // Conditional compilation (#ifdef X)
+#else                       // Optional (#ifndef X or #if !defined(X))
+#endif                      // Required after #if, #ifdef
+\end{lstlisting}
+%\end{block}
+
+ \vspace{-1cm}
+\section{Data Types}
+\vspace{-1cm}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Data Type} & \textbf{Description} \\
+\hline
+bool & boolean (true or false) \\
+\hline
+char & character ('a', 'b', etc.) \\
+\hline
+char[] & character array (C-style string  \\
+ & if null terminated) \\
+\hline
+string & C++ string (from the STL) \\
+\hline
+int & Integer (1, 2, -1, 1000, etc.) \\
+\hline
+long int & long integer \\
+\hline
+float & single precision floating point \\
+\hline
+double & double precision floating point \\
+\hline
+\end{tabular}
+
+These are the most commonly used types: this is not a complete list.
+%%\end{block}
+
+%begin{block}
+ 
+\section{Operators}
+The most commonly used operators in order of precedence:
+\begin{enumerate}
+    \item $++(\text{post-increment}), --(\text{post-decrement})$
+    \item $!(\text{not}), ++ (\text{pre-increment}), -- (\text{pre-decrement})$
+    \item $* / , \% (\text{modulus})$
+    \item $+-$
+    \item $<, <=, >, >=\text{}$
+    \item $==(\text{equal-to}), != (\text{not-equal-to})$
+    \item $\&\&$ (and)
+    \item $||$ (or)
+    \item $= (\text{assignment}), * , / , \%= , +=, -= $
+\end{enumerate}
+%\end{block}
+
+
+\section{Looping}
+
+%\begin{sectionblock}{Loops}
+%\end{sectionblock}
+%begin{block}
+ 
+\subsection{while Loop}
+\begin{lstlisting}
+while (expression)
+  statement;
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+while (x < 100)
+  cout << x++ << endl;
+\end{lstlisting}
+\begin{lstlisting}
+while (expression){
+  statement;
+  statement;
+}
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+while (x < 100){
+  cout << x << endl;
+  x++;
+}
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+
+\subsection{do-while Loop}
+\begin{lstlisting}
+do
+  statement;
+while (expression);
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+do
+  cout << x++ << endl;
+while (x < 100);
+\end{lstlisting}
+\begin{lstlisting}
+do{
+  statement;
+  statement;
+} while (expression);
+\end{lstlisting}
+{\it Example:}
+\begin{lstlisting}
+do {
+  cout << x << endl;
+  x++;
+} while (x < 100);
+\end{lstlisting}
+%\end{block}
+
+%\end{column}
+
+% ---------------- Column 2 ----------------
+%\begin{column}{0.3\paperwidth}
+\subsection{For Loop}
+%begin{block}
+
+%\begin{tabular}{l | l}
+
+%\begin{minipage}{0.45\linewidth}
+
+\begin{lstlisting}
+for (initialization; test; update)
+  statement;
+\end{lstlisting}
+
+\begin{lstlisting}
+for (initialization; test; update){
+  statement;
+  statement;
+}
+\end{lstlisting}
+
+
+%\end{minipage}
+%&
+%\begin{minipage}{0.45\linewidth}
+
+%\end{column}
+% ---------------- Column 2 ----------------
+%\begin{column}{0.23\paperwidth}
+\end{multicols}
+\end{frame}
+
+
+\begin{frame}[t,fragile]{OOP, Templates, Exceptions}
+
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+{\it Example:}
+\subsection{Inheritance}
+\begin{lstlisting}[language=C++]
+class Base {
+public:
+  virtual ~Base() {}
+  virtual void f() = 0;
+};
+class Derived : public Base {
+public:
+  void f() { /* implementation */ }
+};
+\end{lstlisting}
+
+\subsection{Polymorphism}
+\begin{lstlisting}[language=C++]
+Base* b = new Derived();
+b->f();
+delete b; // calls Derived::~Derived then Base::~Base
+\end{lstlisting}
+
+\subsection{Operator Overloading}
+\begin{lstlisting}[language=C++]
+struct Vec { int x,y; };
+Vec operator+(const Vec& a, const Vec& b){ Vec r; r.x = a.x + b.x; r.y = a.y + b.y; return r; }
+std::ostream& operator<<(std::ostream& os, const Vec& v){ return os << v.x << "," << v.y; }
+\end{lstlisting}
+
+\subsection{Exceptions}
+\begin{lstlisting}[language=C++]
+#include <stdexcept>
+#include <iostream>
+int divide(int a,int b){ if(b==0) throw std::runtime_error("divide by zero"); return a/b; }
+try { int r = divide(4,0); } catch(const std::exception &e) { std::cout << e.what(); }
+\end{lstlisting}
+
+\subsection{Function Templates}
+\begin{lstlisting}[language=C++]
+template <class T>
+T maxT(T a,T b){ return (a>b)?a:b; }
+int m = maxT(3,5);
+\end{lstlisting}
+
+\subsection{Class Templates}
+\begin{lstlisting}[language=C++]
+template <class T>
+struct Pair{ T first, second; };
+Pair<int> p; p.first = 1; p.second = 2;
+\end{lstlisting}
+
+\end{multicols}
+\end{frame}
+\begin{frame}[t,fragile]{Functions and Classes}
+  \begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+%begin{block}
+ \subsection{Passing Parameters by Value}
+\begin{lstlisting}
+return_type function(type p1)
+\end{lstlisting}
+Variable is passed into the function but changes to \texttt{p1} are not passed back.
+%\end{block}
+
+%begin{block}
+ \subsection{Passing Parameters by Reference}
+\begin{lstlisting}
+return_type function(type &p1)
+\end{lstlisting}
+Variable is passed into the function and changes to \texttt{p1} are passed back.
+%\end{block}
+
+
+%begin{block}
+ \subsection{Default Parameter Values}
+\begin{lstlisting}
+return_type function(type p1=val)
+\end{lstlisting}
+\texttt{val} is used as the value of \texttt{p1} if the function is called without a parameter.
+%\end{block}
+%\end{column}
+% ---------------- Column 3 ----------------
+%\begin{column}{0.23\paperwidth}
+%begin{block}
+\vspace{-1.cm}
+ \subsection{Struct/Classes}
+ \vspace{-1.cm}
+%\end{block}
+%begin{block}
+%\end{block}
+
+%begin{block}
+ \subsection{Declaration}
+\begin{lstlisting}
+class classname {
+public:
+  classname (params);
+  ~classname();
+  type member1;
+  type member2;
+protected:
+  type member3;
+private:
+  type member4;
+};
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+class Square {
+public:
+  Square();
+  Square (float w);
+  void setWidth(float w);
+  float getArea();
+private:
+  float width;
+};
+\end{lstlisting}
+\begin{itemize}
+    \item \texttt{public} members are accessible from anywhere the class is visible.
+    \item \texttt{private} members are only accessible from the same class or a friend (function or class).
+    \item \texttt{protected} members are accessible from the same class, derived classes, or a friend (function or class).
+    \item constructors may be overloaded just like any other function. You can define two or more constructors as long as each constructor has a different parameter list.
+\end{itemize}
+%\end{block}
+
+%begin{block}
+ \subsection{Definition of Member Functions}
+\begin{lstlisting}
+return_type classname::functionName (params) {
+  statements;
+}
+\end{lstlisting}
+Examples:
+\begin{lstlisting}
+Square::Square() {
+  width = 0;
+}
+void Square::setWidth(float w) {
+  if (w >= 0)
+    width = w;
+  else
+    exit(-1);
+}
+float Square::getArea() {
+  return width * width;
+}
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Definition of Instances}
+\begin{lstlisting}
+classname varName;
+classname* ptrName;
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+Square s1();
+Square s2(3.5);
+Square* sPtr;
+sPtr = new Square (1.8);
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Accessing Members}
+\begin{lstlisting}
+varName.member = val;
+varName.member();
+ptrName->member = val;
+ptrName->member();
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+s1.setWidth(1.5);
+cout << s1.getArea();
+cout << sPtr->getArea();
+\end{lstlisting}
+%\end{block}
+%\end{column}
+%\end{columns}
+\end{multicols}
+\end{frame}
+\begin{frame}[t,fragile]{OOP, Templates, Exceptions}
+
+\setlength{\columnseprule}{0.4pt}  % thickness of line
+
+\begin{multicols}{4}[\setlength{\columnsep}{1.5cm}]
+
+%\begin{columns}[t,totalwidth=0.95\paperwidth, colsep=0.05\paperwidth]
+
+% ---------------- Column 1 ----------------
+%\begin{column}{0.22\paperwidth}
+%begin{block}
+
+ \subsection{OOP Principles}
+\textbf{Encapsulation:} Hide internal implementation details by using access specifiers (\texttt{public}, \texttt{private}, \texttt{protected}) to control access to member variables and functions.
+
+\textbf{Abstraction:} Define interfaces that represent only essential features while hiding complexity. Use abstract classes with pure virtual functions.
+%\end{block}
+
+%begin{block}
+
+ \subsection{Inheritance}
+Inheritance allows a new class to be based on an existing class. The new class inherits all the member variables and functions (except the constructors and destructor) of the class it is based on.
+
+Example:
+\begin{lstlisting}
+class Student
+{
+public:
+  Student (string n, string id);
+  void print();
+protected:
+  string name;
+  string netID;
+};
+class GradStudent : public Student
+{
+public:
+  GradStudent(string n, string id, string prev);
+  void print();
+protected:
+  string prevDegree;
+};
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Visibility of Members after Inheritance}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multirow{2}{*}{Inheritance Specification} & \multicolumn{3}{c|}{Access Specifier in Base Class} \\
+\cline{2-4}
+ & private & protected & public \\
+\hline
+private & private & private & private \\
+\hline
+protected & protected & protected & protected \\
+\hline
+public & protected & protected & public \\
+\hline
+\end{tabular}
+%\end{block}
+
+%begin{block}
+ \subsection{Polymorphism}
+\textbf{Compile-time (Static) Polymorphism:} Function overloading and templates.
+
+\textbf{Runtime (Dynamic) Polymorphism:} Use virtual functions to allow derived classes to override base class methods. Write code that works with base class pointers/references to handle derived classes dynamically.
+
+\textbf{Example:}
+\begin{lstlisting}
+class Shape // Abstract class
+{
+public:
+  virtual void draw() = 0; // pure virtual
+  virtual double area() = 0;
+  virtual ~Shape() {}
+};
+
+class Circle : public Shape
+{
+public:
+  void draw() { /* implementation */ }
+  double area() { return 3.14 * r * r; }
+private:
+  double r;
+};
+
+Shape* shapes[10];
+shapes[0] = new Circle();
+shapes[0]->draw(); // calls Circle::draw()
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Operator Overloading}
+C++ allows you to define how standard operators (+, -, *, etc.) work with classes that you write. For example, to use the operator $+$ with your class, you would write a function named \texttt{operator+} for your class.
+Example:
+Prototype for a function that overloads $+$ for the \texttt{Square} class:
+\begin{lstlisting}
+Square operator+ (const Square &);
+\end{lstlisting}
+
+%\end{column}
+% ---------------- Column 2 ----------------
+%\begin{column}{0.23\paperwidth}
+If the object that receives the function call is not an instance of a class that you wrote, write the function as a \texttt{friend} of your class. This is standard practice for overloading \texttt{<<} and \texttt{>>}.
+
+
+
+
+
+
+Example:
+Prototype for a function that overloads \texttt{<<} for the \texttt{Square} class:
+\begin{lstlisting}
+friend ostream & operator<<
+  (ostream &, const Square &);
+\end{lstlisting}
+Make sure the return type of the overloaded function matches what C++ programmers expect. The return type of relational operators $(<, >, ==, \text{etc.})$ should be \texttt{bool}, the return type of \texttt{<<} should be \texttt{ostream \&}, etc.
+%\end{block}
+
+
+\subsection{Namespaces}
+\begin{lstlisting}[language=C++]
+namespace N { class T {}; }
+N::T t;
+using namespace N;
+\end{lstlisting}
+
+
+%begin{block}
+ \subsection{Exceptions}
+Example:
+\begin{lstlisting}
+try
+{
+  // code here calls functions that might
+  // throw exceptions
+  quotient = divide (num1, num2);
+
+  // or this code might test and throw
+  // exceptions directly
+  if (num3 < 0)
+    throw -1; // exception to be thrown can
+              // be a value or an object
+}
+catch (int)
+{
+  cout << "num3 can not be negative!";
+  exit(-1);
+}
+catch (char* exceptionString)
+{
+  cout << exceptionString;
+  exit(-2);
+}
+// add more catch blocks as needed
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Function Templates}
+Example:
+\begin{lstlisting}
+template <class T>
+T getMax(T a, T b)
+{
+  if (a > b)
+    return a;
+  else
+    return b;
+}
+\end{lstlisting}
+Example calls:
+\begin{lstlisting}
+int a = 9, b = 2, c;
+c = getMax(a, b);
+float f = 5.3, g = 9.7, h;
+h = getMax(f, g);
+\end{lstlisting}
+%\end{block}
+
+%begin{block}
+ \subsection{Class Templates}
+Example:
+\begin{lstlisting}
+template <class T>
+class Point
+{
+public:
+  Point(T x, T y);
+  void print();
+  double distance (Point<T> p);
+private:
+  T x;
+  T y;
+};
+\end{lstlisting}
+Examples:
+\begin{lstlisting}
+Point<int> p1(3, 2);
+Point<float> p2(3.5, 2.5);
+p1.print();
+p2.print();
+\end{lstlisting}
+%\end{block}
+ 
+%begin{block}
+ \subsection{Suggested Websites}
+\begin{itemize}
+    \item C++ Reference: \texttt{http://www.cppreference.com/}
+    \item C++ Tutorial: \texttt{http://www.cplusplus.com/doc/tutorial/}
+    \item \texttt{http://www.informit.com/guides/guide.aspx?g=cplusplus}
+    \item \texttt{http://www.sparknotes.com/cs/}
+    \item C++ Examples: \texttt{http://www.fredosaurus.com/notes-cpp/}
+    \item Gaddis Textbook: \texttt{http://media.pearsoncmg.com/aw/aw\_gaddis\_sowcso\_6/videos}
+    \item Video Notes Source Code: \texttt{ftp://ftp.aw.com/cseng/authors/gaddis/CCSos (5th edition)}
+\end{itemize}
+%Developed for Mississippi State University's CSE1284 and CSE1384 courses.
+%Download the latest version from \texttt{http://cse.msstate.edu/~crumpton/reference}.  
+%February 17, 2009.
+%\end{block}
+
+%\end{column}
+
+%\end{columns}
+\end{multicols}
+\end{frame}
+
+\end{document}
