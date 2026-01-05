@@ -1,0 +1,608 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+% Theme Setup
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+% Metadata
+\title{Relational Model \& Algebra}
+\subtitle{15-445/645 Database Systems}
+\author{Prof. Andy Pavlo}
+\institute{Carnegie Mellon University}
+\date{Fall 2024}
+
+% Code listing style
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{green!60!black},
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    breaklines=true
+}
+
+\begin{document}
+
+% --- PAGE 1 ---
+\begin{frame}
+    \titlepage
+    \centering
+    [cite_start]\tiny{[cite: 1, 2, 3]}
+\end{frame}
+
+% --- PAGE 2 ---
+\begin{frame}
+    \frametitle{\#1 KB + BD}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/slide_02_meme.png}
+    \vfill
+    [cite_start]\small{\#2 DBS [cite: 4, 5]}
+\end{frame}
+
+% --- PAGE 3 ---
+\begin{frame}
+    \frametitle{r/cmu 4 days ago}
+    [cite_start]\textbf{is 15-440 or 15-445 harder? [cite: 8]}
+    \vspace{1em}
+    \begin{itemize}
+        \item ...
+        [cite_start]\item I don't really have preference for content and would like to spend more of my time on other stuff, so does anyone have an idea about which one of these is more difficult? [cite: 10]
+    \end{itemize}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/slide_03_reddit_post.png}
+\end{frame}
+
+% --- PAGE 4 ---
+\begin{frame}
+    \frametitle{r/cmu 4 days ago}
+    [cite_start]\textbf{apavlo 4d ago [cite: 14]}
+    \vspace{1em}
+    \begin{blockquote}
+    [cite_start]Since you've already admitted that you don't want to pursue a database-centric lifestyle, then you should probably not take my course. [cite: 19]
+    \end{blockquote}
+\end{frame}
+
+% --- PAGE 5 ---
+\begin{frame}
+    \frametitle{COURSE LOGISTICS}
+    \begin{itemize}
+        \item \textbf{Course Policies + Schedule:} Course Web Page
+        \item \textbf{Discussion + Announcements:} Piazza
+        \item \textbf{Homeworks + Projects:} Gradescope
+        [cite_start]\item \textbf{Final Grades:} Canvas [cite: 25]
+        [cite_start]\item \textbf{Waitlist:} Six open seats (as of 12pm today) [cite: 26]
+    \end{itemize}
+    \vspace{1em}
+    [cite_start]\textbf{Non-CMU students can complete all assignments using Gradescope (Code: WWWJZ5). [cite: 27]}
+    \vspace{1em}
+    \begin{alertblock}{Warning}
+    Do not post your solutions on Github. Do not email instructors / TAs for help.
+    \end{alertblock}
+    [cite_start]Discord Channel: https://discord.gg/YF7dMCg [cite: 28]
+\end{frame}
+
+% --- PAGE 6 ---
+\begin{frame}
+    \frametitle{TODAY'S AGENDA}
+    \begin{enumerate}
+        [cite_start]\item Database Systems Background [cite: 33]
+        [cite_start]\item Relational Model [cite: 34]
+        [cite_start]\item Relational Algebra [cite: 35]
+        [cite_start]\item Alternative Data Models [cite: 36]
+        [cite_start]\item Q\&A Session [cite: 37]
+    \end{enumerate}
+\end{frame}
+
+% --- PAGE 8 ---
+\begin{frame}
+    \frametitle{DATABASE}
+    \begin{itemize}
+        [cite_start]\item Organized collection of inter-related data that models some aspect of the real-world. [cite: 43]
+        [cite_start]\item Databases are the core component of most computer applications. [cite: 44]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 9 ---
+\begin{frame}
+    \frametitle{DATABASE EXAMPLE}
+    [cite_start]Create a database that models a digital music store to keep track of artists and albums. [cite: 49]
+    \vspace{1em}
+    \textbf{Information we need to keep track of in our store:}
+    \begin{itemize}
+        [cite_start]\item Information about Artists [cite: 50]
+        [cite_start]\item The Albums those Artists released [cite: 51]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 10 ---
+\begin{frame}[fragile]
+    \frametitle{FLAT FILE STRAWMAN}
+    [cite_start]Store our database as comma-separated value (CSV) files that we manage ourselves in application code. [cite: 54]
+    \begin{itemize}
+        [cite_start]\item Use a separate file per entity. [cite: 55]
+        [cite_start]\item The application must parse the files each time they want to read/update records. [cite: 56]
+    \end{itemize}
+    \vspace{1em}
+    \begin{columns}
+        \begin{column}{0.45\textwidth}
+            \textbf{Artist(name, year, country)}
+            \begin{verbatim}
+"Wu-Tang Clan", 1992, "USA"
+"Notorious BIG", 1992, "USA"
+[cite_start]"GZA", 1990, "USA" [cite: 58-64]
+            \end{verbatim}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \textbf{Album(name, artist, year)}
+            \begin{verbatim}
+"Enter the Wu-Tang", "Wu-Tang Clan", 1993
+"St.Ides Mix Tape", "Wu-Tang Clan", 1994
+"Liquid Swords", "GZA", 1990
+            \end{verbatim}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 11 ---
+\begin{frame}[fragile]
+    \frametitle{FLAT FILE STRAWMAN}
+    [cite_start]Example: Get the year that GZA went solo. [cite: 68]
+    \vspace{1em}
+    \begin{lstlisting}[language=Python]
+for line in file.readlines():
+    record = parse(line)
+    if record[0] == "GZA":
+        print(int(record[1]))
+    [cite_start]\end{lstlisting} [cite: 69]
+\end{frame}
+
+% --- PAGE 12 ---
+\begin{frame}
+    \frametitle{FLAT FILES: DATA INTEGRITY}
+    \begin{itemize}
+        [cite_start]\item How do we ensure that the artist is the same for each album entry? [cite: 70]
+        [cite_start]\item What if somebody overwrites the album year with an invalid string? [cite: 71]
+        [cite_start]\item What if there are multiple artists on an album? [cite: 72]
+        \item What happens if we delete an artist that has albums?
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 13 ---
+\begin{frame}
+    \frametitle{FLAT FILES: IMPLEMENTATION}
+    \begin{itemize}
+        [cite_start]\item How do you find a particular record? [cite: 74]
+        [cite_start]\item What if we now want to create a new application that uses the same database? [cite: 75]
+        [cite_start]\item What if that application is running on a different machine? [cite: 76]
+        [cite_start]\item What if two threads try to write to the same file at the same time? [cite: 77]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 14 ---
+\begin{frame}
+    \frametitle{FLAT FILES: DURABILITY}
+    \begin{itemize}
+        [cite_start]\item What if the machine crashes while our program is updating a record? [cite: 78]
+        [cite_start]\item What if we want to replicate the database on multiple machines for high availability? [cite: 79]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 15 ---
+\begin{frame}
+    \frametitle{DATABASE MANAGEMENT SYSTEM}
+    \begin{itemize}
+        [cite_start]\item A database management system (DBMS) is software that allows applications to store and analyze information in a database. [cite: 80]
+        [cite_start]\item A general-purpose DBMS supports the definition, creation, querying, update, and administration of databases in accordance with some data model. [cite: 81]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 16 ---
+\begin{frame}
+    \frametitle{DATA MODELS}
+    \begin{itemize}
+        [cite_start]\item A data model is a collection of concepts for describing the data in a database. [cite: 83]
+        [cite_start]\item A schema is a description of a particular collection of data, using a given data model. [cite: 84]
+        [cite_start]\item $\rightarrow$ This defines the structure of data for a data model. [cite: 85]
+        \item $\rightarrow$ Otherwise, you have random bits with no meaning.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 18 ---
+\begin{frame}
+    \frametitle{DATA MODELS}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                [cite_start]\item \textbf{Relational} $\leftarrow$ Most DBMSs [cite: 91]
+                \item Key/Value
+                \item Graph
+                \item Document / JSON / XML / Object
+                \item Wide-Column / Column-family
+                \item Array (Vector, Matrix, Tensor)
+                \item Hierarchical
+                \item Network
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+             % Placeholder for list visual
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 24 ---
+\begin{frame}
+    \frametitle{EARLY DBMSs}
+    [cite_start]Early database applications were difficult to build and maintain on available DBMSs in the 1960s. [cite: 97]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Examples: IDS, IMS, CODASYL [cite: 98]
+        \item $\rightarrow$ Computers were expensive, humans were cheap.
+    \end{itemize}
+    Tight coupling between logical and physical layers.
+    \begin{itemize}
+        [cite_start]\item Programmers had to (roughly) know what queries the application would execute before they could deploy the database. [cite: 99]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 25 ---
+\begin{frame}
+    \frametitle{EARLY DBMSs}
+    [cite_start]Ted Codd was a mathematician at IBM Research in the late 1960s. [cite: 100]
+    \begin{itemize}
+        [cite_start]\item Codd saw IBM’s developers rewriting database programs every time the database’s schema or layout changed. [cite: 101]
+        [cite_start]\item Devised the relational model in 1969. [cite: 102]
+    \end{itemize}
+    \centering
+    \includegraphics[width=0.2\textwidth]{images/edgar_codd.jpg} \\
+    [cite_start]Edgar F. Codd [cite: 103]
+\end{frame}
+
+% --- PAGE 29 ---
+\begin{frame}
+    \frametitle{RELATIONAL MODEL}
+    [cite_start]The relational model defines a database abstraction based on relations to avoid maintenance overhead. [cite: 121]
+    \vspace{1em}
+    [cite_start]\textbf{Key tenets:} [cite: 122]
+    \begin{itemize}
+        \item Store database in simple data structures (relations).
+        \item Physical storage left up to the DBMS implementation.
+        [cite_start]\item Access data through high-level language, DBMS figures out best execution strategy. [cite: 123]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 31 ---
+\begin{frame}
+    \frametitle{DATA INDEPENDENCE}
+    [cite_start]Isolate the user/application from low level data representation. [cite: 126]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ The user only worries about high-level application logic. [cite: 127]
+        [cite_start]\item $\rightarrow$ DBMS optimizes the layout according to operating environment, database contents, and workload. [cite: 128]
+        [cite_start]\item $\rightarrow$ DBMS can then re-optimize the database if/when these factors changes. [cite: 129]
+    \end{itemize}
+    % Diagram placeholder
+    \centering
+    [cite_start]\textit{(Diagram showing Physical vs Logical vs External Schema)} [cite: 130]
+\end{frame}
+
+% --- PAGE 32 ---
+\begin{frame}
+    \frametitle{RELATIONAL MODEL}
+    \begin{itemize}
+        [cite_start]\item A relation is an unordered set that contain the relationship of attributes that represent entities. [cite: 131]
+        [cite_start]\item A tuple is a set of attribute values (aka its domain) in the relation. [cite: 132]
+        \item $\rightarrow$ Values are (normally) atomic/scalar.
+        [cite_start]\item $\rightarrow$ The special value NULL is a member of every domain (if allowed). [cite: 133]
+    \end{itemize}
+    \vspace{1em}
+    [cite_start]\textbf{n-ary Relation} = Table with n columns [cite: 134]
+\end{frame}
+
+% --- PAGE 33 ---
+\begin{frame}
+    \frametitle{RELATIONAL MODEL: PRIMARY KEYS}
+    [cite_start]A relation's primary key uniquely identifies a single tuple. [cite: 135]
+    \begin{itemize}
+        [cite_start]\item Some DBMSs automatically create an internal primary key if a table does not define one. [cite: 136]
+        [cite_start]\item DBMS can auto-generation unique primary keys via an identity column: [cite: 137]
+        \begin{itemize}
+            \item IDENTITY (SQL Standard)
+            \item SEQUENCE (PostgreSQL / Oracle)
+            \item AUTO\_INCREMENT (MySQL)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 35 ---
+\begin{frame}
+    \frametitle{RELATIONAL MODEL: FOREIGN KEYS}
+    [cite_start]A foreign key specifies that an attribute from one relation maps to a tuple in another relation. [cite: 141]
+    \vspace{1em}
+    % Diagram placeholder for Artist/Album mapping
+    \includegraphics[width=0.6\textwidth]{images/foreign_key_diagram.png}
+\end{frame}
+
+% --- PAGE 39 ---
+\begin{frame}[fragile]
+    \frametitle{RELATIONAL MODEL: CONSTRAINTS}
+    [cite_start]User-defined conditions that must hold for any instance of the database. [cite: 148]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Can validate data within a single tuple or across entire relation(s). [cite: 149]
+        \item $\rightarrow$ DBMS prevents modifications that violate any constraint.
+    \end{itemize}
+    \vspace{1em}
+    [cite_start]Unique key and referential (fkey) constraints are the most common. [cite: 150]
+    
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{lstlisting}[language=SQL]
+CREATE TABLE Artist (
+  name VARCHAR NOT NULL,
+  year INT, 
+  country CHAR(60),
+  CHECK (year > 1900)
+);
+            \end{lstlisting}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+             [cite_start]SQL:92 supports global asserts but these are rarely used (too slow). [cite: 151]
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 40 ---
+\begin{frame}
+    \frametitle{DATA MANIPULATION LANGUAGES (DML)}
+    [cite_start]The API that a DBMS exposes to applications to store and retrieve information from a database. [cite: 153]
+    \begin{itemize}
+        [cite_start]\item \textbf{Procedural:} The query specifies the (high-level) strategy to find the desired result based on sets / bags. [cite: 154]
+        [cite_start]\item \textbf{Non-Procedural (Declarative):} The query specifies only what data is wanted and not how to find it. [cite: 155]
+    \end{itemize}
+    \centering
+    [cite_start]Relational Algebra vs Relational Calculus [cite: 156]
+\end{frame}
+
+% --- PAGE 41 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA}
+    [cite_start]Fundamental operations to retrieve and manipulate tuples in a relation. [cite: 157]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Based on set algebra (unordered lists with no duplicates). [cite: 158]
+        [cite_start]\item Each operator takes one or more relations as its inputs and outputs a new relation. [cite: 159]
+        [cite_start]\item $\rightarrow$ We can ``chain'' operators together to create more complex operations. [cite: 160]
+    \end{itemize}
+    \vspace{1em}
+    \begin{columns}
+        \begin{column}{0.3\textwidth}
+            $\sigma$ Select\\
+            $\pi$ Projection\\
+            $\cup$ Union
+        \end{column}
+        \begin{column}{0.3\textwidth}
+            $\cap$ Intersection\\
+            $-$ Difference\\
+            $\times$ Product
+        \end{column}
+        \begin{column}{0.3\textwidth}
+            [cite_start]$\bowtie$ Join [cite: 161]
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 42 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: SELECT}
+    [cite_start]Choose a subset of the tuples from a relation that satisfies a selection predicate. [cite: 162]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Predicate acts as a filter to retain only tuples that fulfill its qualifying requirement. [cite: 163]
+        [cite_start]\item $\rightarrow$ Can combine multiple predicates using conjunctions / disjunctions. [cite: 164]
+    \end{itemize}
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $\sigma_{predicate}(R)$ [cite: 165]
+    \vspace{1em}
+    \centering
+    $\sigma_{a\_id='a2' \land b\_id>102}(R)$
+\end{frame}
+
+% --- PAGE 44 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: PROJECTION}
+    [cite_start]Generate a relation with tuples that contains only the specified attributes. [cite: 172]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Rearrange attributes’ ordering. [cite: 173]
+        \item $\rightarrow$ Remove unwanted attributes.
+        \item $\rightarrow$ Manipulate values to create derived attributes.
+    \end{itemize}
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $\pi_{A1,A2,\dots,An}(R)$ [cite: 174]
+    \vspace{1em}
+    \centering
+    $\pi_{b\_id-100,a\_id}(\sigma_{a\_id='a2'}(R))$
+\end{frame}
+
+% --- PAGE 45 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: UNION}
+    [cite_start]Generate a relation that contains all tuples that appear in either only one or both input relations. [cite: 176]
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $(R \cup S)$ [cite: 177]
+\end{frame}
+
+% --- PAGE 46 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: INTERSECTION}
+    [cite_start]Generate a relation that contains only the tuples that appear in both of the input relations. [cite: 179]
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $(R \cap S)$ [cite: 180]
+\end{frame}
+
+% --- PAGE 47 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: DIFFERENCE}
+    [cite_start]Generate a relation that contains only the tuples that appear in the first and not the second of the input relations. [cite: 182]
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $(R - S)$ [cite: 183]
+\end{frame}
+
+% --- PAGE 48 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: PRODUCT}
+    [cite_start]Generate a relation that contains all possible combinations of tuples from the input relations. [cite: 185]
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $(R \times S)$ [cite: 186]
+\end{frame}
+
+% --- PAGE 49 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: JOIN}
+    [cite_start]Generate a relation that contains all tuples that are a combination of two tuples (one from each input relation) with a common value(s) for one or more attributes. [cite: 188]
+    \vspace{1em}
+    [cite_start]\textbf{Syntax:} $(R \bowtie S)$ [cite: 189]
+\end{frame}
+
+% --- PAGE 53 ---
+\begin{frame}
+    \frametitle{RELATIONAL ALGEBRA: EXTRA OPERATORS}
+    \begin{itemize}
+        \item Rename ($\rho$)
+        \item Assignment ($R \leftarrow S$)
+        \item Duplicate Elimination ($\delta$)
+        \item Aggregation ($\gamma$)
+        \item Sorting ($\tau$)
+        [cite_start]\item Division ($R \div S$) [cite: 198]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 54 ---
+\begin{frame}
+    \frametitle{OBSERVATION}
+    [cite_start]Relational algebra defines an ordering of the high level steps of how to compute a query. [cite: 199]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Example: $\sigma_{b\_id=102}(R \bowtie S)$ vs. $(R \bowtie (\sigma_{b\_id=102}(S))$ [cite: 200]
+    \end{itemize}
+    A better approach is to state the high-level answer that you want the DBMS to compute.
+    \begin{itemize}
+        \item $\rightarrow$ Example: Retrieve the joined tuples from R and S where b\_id equals 102.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 55 ---
+\begin{frame}
+    \frametitle{RELATIONAL MODEL: QUERIES}
+    [cite_start]The relational model is independent of any query language implementation. [cite: 201]
+    \begin{itemize}
+        [cite_start]\item SQL is the de facto standard (many dialects). [cite: 202]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 58 ---
+\begin{frame}
+    \frametitle{DOCUMENT DATA MODEL}
+    [cite_start]A collection of record documents containing a hierarchy of named field/value pairs. [cite: 206]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ A field’s value can be either a scalar type, an array of values, or another document. [cite: 207]
+        \item $\rightarrow$ Modern implementations use JSON. [cite_start]Older systems use XML or custom object representations. [cite: 208]
+    \end{itemize}
+    [cite_start]Avoid ``relational-object impedance mismatch'' by tightly coupling objects and database. [cite: 209]
+\end{frame}
+
+% --- PAGE 61 ---
+\begin{frame}[fragile]
+    \frametitle{DOCUMENT DATA MODEL}
+    \begin{columns}
+        \begin{column}{0.45\textwidth}
+            \textbf{Artist}
+\begin{lstlisting}
+{
+ "name": "GZA",
+ "year": 1990,
+ "albums": [
+  {
+  "name": "Liquid Swords",
+  "year": 1995
+  },
+  ...
+ ]
+}
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \textbf{Application Code}
+\begin{lstlisting}[language=Java]
+class Artist {
+  int id;
+  String name;
+  int year;
+  Album albums[];
+}
+[cite_start]\end{lstlisting} [cite: 212-214]
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 63 ---
+\begin{frame}
+    \frametitle{VECTOR DATA MODEL}
+    [cite_start]One-dimensional arrays used for nearest-neighbor search (exact or approximate). [cite: 218]
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Used for semantic search on embeddings generated by ML trained transformer models (think ChatGPT). [cite: 219]
+        [cite_start]\item $\rightarrow$ Native integration with modern ML tools and APIs (e.g., LangChain, OpenAI). [cite: 220]
+    \end{itemize}
+    [cite_start]At their core, these systems use specialized indexes to perform NN searches quickly. [cite: 221]
+\end{frame}
+
+% --- PAGE 65 ---
+\begin{frame}
+    \frametitle{VECTOR DATA MODEL}
+    % Conceptual representation of the slide content
+    \textbf{Embeddings}
+    \begin{itemize}
+        \item Id1 $\rightarrow$ [0.32, 0.78, 0.30, ...]
+        \item Id2 $\rightarrow$ [0.99, 0.19, 0.81, ...]
+        \item Id3 $\rightarrow$ [0.01, 0.18, 0.85, ...]
+    \end{itemize}
+    \vspace{1em}
+    [cite_start]\textbf{Vector Index}: HNSW, IVFFlat, Meta Faiss, Spotify Annoy [cite: 226]
+\end{frame}
+
+% --- PAGE 68 ---
+\begin{frame}
+    \frametitle{CONCLUSION}
+    [cite_start]Databases are ubiquitous. [cite: 229]
+    \begin{itemize}
+        [cite_start]\item Relational algebra defines the primitives for processing queries on a relational database. [cite: 230]
+        [cite_start]\item We will see relational algebra again when we talk about query optimization + execution. [cite: 231]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 69 ---
+\begin{frame}
+    \frametitle{NEXT CLASS}
+    \textbf{Modern SQL}
+    \begin{itemize}
+        [cite_start]\item $\rightarrow$ Make sure you understand basic SQL before the lecture. [cite: 232]
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 70 ---
+\begin{frame}
+    \frametitle{ASK ANDY ANYTHING}
+    \begin{itemize}
+        \item Questions about database industry?
+        \item Questions about database jobs?
+        [cite_start]\item Questions about database systems? [cite: 235]
+    \end{itemize}
+\end{frame}
+
+\end{document}

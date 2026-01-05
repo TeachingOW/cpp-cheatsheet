@@ -1,0 +1,44 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{url}
+
+% Theme Setup (CMU Style Approximation)
+\usetheme{Madrid}
+\usecolortheme{beaver} % Uses red/grey which is close to CMU colors
+\definecolor{cmured}{RGB}{196, 18, 48}
+\setbeamercolor{structure}{fg=cmured}
+\setbeamercolor{title}{bg=cmured, fg=white}
+\setbeamercolor{frametitle}{bg=black, fg=white}
+
+% Code Listing Setup
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{green!50!black},
+    breaklines=true,
+    frame=single,
+    language=SQL
+}
+
+% Title Info
+\title{Relational Model \& Algebra}
+\subtitle{15-445/645 Database Systems}
+\author{Prof. Andy Pavlo}
+\institute{Carnegie Mellon University}
+\date{Fall 2024}
+
+\begin{document}
+%\input{slides0.tex}
+%\input{slides1.tex}
+\input{slides2.tex}
+
+\end{document}

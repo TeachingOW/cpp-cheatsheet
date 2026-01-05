@@ -1,0 +1,383 @@
+
+% --- PAGE 1 ---
+\begin{frame}
+    \titlepage
+    \centering
+    \includegraphics[width=0.3\textwidth]{extracted_p1_1_image.jpeg}
+\end{frame}
+
+% --- PAGE 2 ---
+\begin{frame}
+    \centering
+    %\includegraphics[width=0.8\textwidth]{extracted_p2_1_} 
+\end{frame}
+
+% --- PAGE 3 ---
+\begin{frame}{Reddit Context}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \includegraphics[width=\textwidth]{extracted_p3_1_image.jpeg}
+        \column{0.5\textwidth}
+        \textit{"is 15-440 or 15-445 harder? ... I don't really have preference for content and would like to spend more of my time on other stuff..."}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 4 ---
+\begin{frame}{Reddit Context}
+    \centering
+    \includegraphics[width=0.8\textwidth]{extracted_p4_1_image.jpeg}
+    \vspace{1em}
+    \begin{quote}
+        "Since you've already admitted that you don't want to pursue a database-centric lifestyle, then you should probably not take my course." - apavlo
+    \end{quote}
+\end{frame}
+
+% --- PAGE 5 ---
+\begin{frame}{Course Logistics}
+    \begin{itemize}
+        \item \textbf{Course Policies + Schedule:} Course Web Page
+        \item \textbf{Discussion + Announcements:} Piazza
+        \item \textbf{Homeworks + Projects:} Gradescope
+        \item \textbf{Final Grades:} Canvas
+        \item \textbf{Waitlist:} Six open seats (as of 12pm today)
+    \end{itemize}
+    \vspace{1em}
+    \begin{itemize}
+        \item Non-CMU students can complete all assignments using Gradescope (Code: WWWJZ5).
+        \item \textbf{Do not post your solutions on Github.}
+        \item \textbf{Do not email instructors / TAs for help.}
+        \item Discord Channel: \url{https://discord.gg/YF7dMCg}
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 6 ---
+\begin{frame}{Today's Agenda}
+    \begin{enumerate}
+        \item Database Systems Background
+        \item Relational Model
+        \item Relational Algebra
+        \item Alternative Data Models
+        \item Q\&A Session
+    \end{enumerate}
+\end{frame}
+
+% --- PAGE 7 ---
+\begin{frame}
+    \centering
+    \Huge \textbf{Databases}
+\end{frame}
+
+% --- PAGE 8 ---
+\begin{frame}{Database}
+    \Large
+    \begin{itemize}
+        \item Organized collection of inter-related data that models some aspect of the real-world.
+        \item Databases are the core component of most computer applications.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 9 ---
+\begin{frame}{Database Example}
+    \textbf{Goal:} Create a database that models a digital music store to keep track of artists and albums.
+    \vspace{1em}
+    \begin{itemize}
+        \item Information we need to keep track of in our store:
+        \begin{itemize}
+            \item Information about Artists
+            \item The Albums those Artists released
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 10 ---
+\begin{frame}[fragile]{Flat File Strawman}
+    \textbf{Proposal:} Store our database as comma-separated value (CSV) files that we manage ourselves in application code.
+    \begin{itemize}
+        \item Use a separate file per entity.
+        \item The application must parse the files each time they want to read/update records.
+    \end{itemize}
+    \vspace{0.5em}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{Artist(name, year, country)}
+\begin{verbatim}
+"Wu-Tang Clan", 1992, "USA"
+"Notorious BIG", 1992, "USA"
+"GZA", 1990, "USA"
+\end{verbatim}
+        \column{0.5\textwidth}
+        \textbf{Album(name, artist, year)}
+\begin{verbatim}
+"Enter the Wu-Tang", "Wu-Tang Clan", 1993
+"St.Ides Mix Tape", "Wu-Tang Clan", 1994
+"Liquid Swords", "GZA", 1990
+\end{verbatim}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 11 ---
+\begin{frame}[fragile]{Flat File Strawman}
+    \textbf{Example:} Get the year that GZA went solo.
+\begin{lstlisting}[language=Python]
+for line in file.readlines():
+    record = parse(line)
+    if record[0] == "GZA":
+        print(int(record[1]))
+\end{lstlisting}
+
+    \vspace{1em}
+    \textbf{Input File:}
+\begin{verbatim}
+"Wu-Tang Clan",1992,"USA"
+"Notorious BIG",1992,"USA"
+"GZA",1990,"USA"
+\end{verbatim}
+\end{frame}
+
+% --- PAGE 12 ---
+\begin{frame}{Flat Files: Data Integrity}
+    \begin{itemize}
+        \item How do we ensure that the artist is the same for each album entry?
+        \item What if somebody overwrites the album year with an invalid string?
+        \item What if there are multiple artists on an album?
+        \item What happens if we delete an artist that has albums?
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 13 ---
+\begin{frame}{Flat Files: Implementation}
+    \begin{itemize}
+        \item How do you find a particular record?
+        \item What if we now want to create a new application that uses the same database?
+        \item What if that application is running on a different machine?
+        \item What if two threads try to write to the same file at the same time?
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 14 ---
+\begin{frame}{Flat Files: Durability}
+    \begin{itemize}
+        \item What if the machine crashes while our program is updating a record?
+        \item What if we want to replicate the database on multiple machines for high availability?
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 15 ---
+\begin{frame}{Database Management System}
+    \textbf{Definition:} A database management system (DBMS) is software that allows applications to store and analyze information in a database.
+    \vspace{1em}
+    \begin{itemize}
+        \item A general-purpose DBMS supports the definition, creation, querying, update, and administration of databases in accordance with some data model.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 16 ---
+\begin{frame}{Data Models}
+    \textbf{Data Model:} A collection of concepts for describing the data in a database.
+    \vspace{1em}
+    \textbf{Schema:} A description of a particular collection of data, using a given data model.
+    \begin{itemize}
+        \item $\rightarrow$ This defines the structure of data for a data model.
+        \item $\rightarrow$ Otherwise, you have random bits with no meaning.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 18 ---
+\begin{frame}{Data Models}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item \textbf{Relational} $\leftarrow$ Most DBMSs
+            \item Key/Value
+            \item Graph
+            \item Document / JSON / XML / Object
+            \item Wide-Column / Column-family
+            \item Array (Vector, Matrix, Tensor)
+            \item Hierarchical
+            \item Network
+        \end{itemize}
+        \column{0.5\textwidth}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 19 ---
+\begin{frame}{Data Models}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item Relational
+            \item \textbf{Key/Value} $\leftarrow$ Simple Apps / Caching
+            \item Graph
+            \item Document / JSON / XML / Object
+            \item Wide-Column / Column-family
+            \item Array (Vector, Matrix, Tensor)
+            \item Hierarchical
+            \item Network
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 20 ---
+\begin{frame}{Data Models}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item Relational
+            \item Key/Value
+            \item \textbf{Graph}
+            \item \textbf{Document / JSON / XML / Object} $\leftarrow$ NoSQL
+            \item \textbf{Wide-Column / Column-family}
+            \item Array (Vector, Matrix, Tensor)
+            \item Hierarchical
+            \item Network
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 21 ---
+\begin{frame}{Data Models}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item Relational
+            \item Key/Value
+            \item Graph
+            \item Document / JSON / XML / Object
+            \item Wide-Column / Column-family
+            \item \textbf{Array (Vector, Matrix, Tensor)} $\leftarrow$ ML / Science
+            \item Hierarchical
+            \item Network
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 22 ---
+\begin{frame}{Data Models}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item Relational
+            \item Key/Value
+            \item Graph
+            \item Document / JSON / XML / Object
+            \item Wide-Column / Column-family
+            \item Array (Vector, Matrix, Tensor)
+            \item \textbf{Hierarchical} $\leftarrow$ Obsolete / Legacy / Rare
+            \item \textbf{Network}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 23 ---
+\begin{frame}{Data Models}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item \textbf{Relational} $\leftarrow$ This Course
+            \item Key/Value
+            \item Graph
+            \item Document / JSON / XML / Object
+            \item Wide-Column / Column-family
+            \item Array (Vector, Matrix, Tensor)
+            \item Hierarchical
+            \item Network
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 24 ---
+\begin{frame}{Early DBMSs}
+    Early database applications were difficult to build and maintain on available DBMSs in the 1960s.
+    \begin{itemize}
+        \item $\rightarrow$ Examples: IDS, IMS, CODASYL
+        \item $\rightarrow$ Computers were expensive, humans were cheap.
+    \end{itemize}
+    \vspace{1em}
+    Tight coupling between logical and physical layers.
+    \begin{itemize}
+        \item Programmers had to (roughly) know what queries the application would execute before they could deploy the database.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 25 ---
+\begin{frame}{Early DBMSs}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \textbf{Edgar F. Codd}
+        \begin{itemize}
+            \item Ted Codd was a mathematician at IBM Research in the late 1960s.
+            \item Codd saw IBM’s developers rewriting database programs every time the database’s schema or layout changed.
+            \item Devised the relational model in 1969.
+        \end{itemize}
+        \column{0.4\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{extracted_p25_1_image.png}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 26 ---
+\begin{frame}{Relational Model (1970)}
+    \centering
+    \includegraphics[width=0.3\textwidth]{extracted_p26_1_image.png} \hspace{0.5em}
+    \includegraphics[width=0.3\textwidth]{extracted_p26_2_image.jpeg} \hspace{0.5em}
+    \includegraphics[width=0.3\textwidth]{extracted_p26_3_image.png}
+    \\
+    \textit{"A Relational Model of Data for Large Shared Data Banks" - CACM 1970}
+\end{frame}
+
+% --- PAGE 27 ---
+\begin{frame}{CODASYL}
+    \begin{itemize}
+        \item ACM SIGFIDET Workshop on Data Description, Access, and Control in Ann Arbor, Michigan, held 1–3 May 1974
+        \item The Differences and Similarities Between the Data Base Set and Relational Views of Data.
+    \end{itemize}
+    \centering
+    \includegraphics[width=0.8\textwidth]{extracted_p27_1_image.png}
+\end{frame}
+
+% --- PAGE 28 ---
+\begin{frame}{The Great Debate (1974)}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{COBOL/CODASYL camp (Bachman):}
+        \begin{enumerate}
+            \item The relational model is too mathematical. No mere mortal programmer will understand it.
+            \item You won't be able to build an efficient implementation.
+            \item OLTP apps want record-oriented operations.
+        \end{enumerate}
+        \column{0.5\textwidth}
+        \textbf{Relational camp (Codd/Stonebraker):}
+        \begin{enumerate}
+            \item Nothing as complicated as CODASYL can be the right way.
+            \item Set-oriented queries are too hard in CODASYL DML.
+            \item CODASYL model has no formal underpinning.
+        \enumerate}
+    \end{columns}
+    \vspace{1em}
+    \centering
+    \includegraphics[height=1.5cm]{extracted_p27_2_image.png}
+    \includegraphics[height=1.5cm]{extracted_p27_3_image.jpeg}
+    \includegraphics[height=1.5cm]{extracted_p27_4_image.jpeg}
+    \includegraphics[height=1.5cm]{extracted_p27_5_image.jpeg}
+\end{frame}
+
+% --- PAGE 29 ---
+\begin{frame}{Relational Model}
+    The relational model defines a database abstraction based on relations to avoid maintenance overhead.
+    \vspace{1em}
+    \textbf{Key tenets:}
+    \begin{itemize}
+        \item Store database in simple data structures (relations).
+        \item Physical storage left up to the DBMS implementation.
+        \item Access data through high-level language; DBMS figures out best execution strategy.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 30 ---
+\begin{frame}{Relational Model}
+    \begin{itemize}
+        \item Relations have attributes (columns) and tuples (rows).
+        \item Each attribute has a domain of allowed values.
+        \item All tuples in a relation have the same attributes.
+    \end{itemize}
+\end{frame}

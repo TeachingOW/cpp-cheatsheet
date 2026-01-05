@@ -1,0 +1,142 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\title{\textbf{Database Systems: Modern SQL}}
+\author{Prof. Andy Pavlo}
+\institute{15-445/645 Fall 2024}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+% Slide 1: Introduction & Background
+\begin{frame}
+\frametitle{Introduction and Background}
+\begin{itemize}
+    \item \textbf{Today's Agenda}: Database Systems Background, Relational Model, Relational Algebra, Alternative Data Models, and a Q\&A Session [1].
+    \item \textbf{Last Class Recap}: The Relational Model was introduced as the \textbf{superior data model} for databases, with Relational Algebra providing the building blocks for querying and modification [1].
+\end{itemize}
+\end{frame}
+
+% Slide 2: SQL History (Early Years)
+\begin{frame}
+\frametitle{SQL History: The Origins}
+\begin{itemize}
+    \item \textbf{1971}: IBM created \textbf{SQUARE}, its first relational query language [1].
+    \item \textbf{1972}: IBM created \textbf{"SEQUEL"} (Structured English Query Language) for the IBM System R prototype [2].
+    \item \textbf{Commercial Releases}: IBM released commercial SQL-based DBMSs including System/38 (1979), SQL/DS (1981), and DB2 (1983) [2].
+\end{itemize}
+\end{frame}
+
+% Slide 3: SQL Standards
+\begin{frame}
+\frametitle{SQL Standards and Evolution}
+\begin{itemize}
+    \item \textbf{Standardization}: Became an \textbf{ANSI Standard} in 1986 and \textbf{ISO} in 1987 [3, 4].
+    \item \textbf{Current Standard}: The latest is \textbf{SQL:2023}, which includes Property Graph Queries and Multi-Dimensional Arrays [3, 4].
+    \item \textbf{Compatibility}: \textbf{SQL-92} remains the minimum language syntax a system needs to claim SQL support [3, 5, 6].
+    \item \textbf{Modern Context}: Despite claims that AI or vector databases might replace it, SQL remains the \textbf{de facto standard} for interacting with databases [4, 5].
+\end{itemize}
+\end{frame}
+
+% Slide 4: Relational Languages & Logic
+\begin{frame}
+\frametitle{Relational Languages and Logic}
+\begin{itemize}
+    \item \textbf{Language Categories}: Includes \textbf{DML} (Data Manipulation), \textbf{DDL} (Data Definition), and \textbf{DCL} (Data Control) [6].
+    \item \textbf{Extended Features}: Includes view definitions, integrity/referential constraints, and transactions [6].
+    \item \textbf{Important Logic}: Unlike relational algebra (sets), \textbf{SQL is based on bags} (allowing duplicates) [6].
+\end{itemize}
+\end{frame}
+
+% Slide 5: Aggregates
+\begin{frame}
+\frametitle{Aggregates}
+\begin{itemize}
+    \item \textbf{Functions}: Return a \textbf{single value} from a bag of tuples [7].
+    \item \textbf{Standard Functions}: \texttt{AVG}, \texttt{MIN}, \texttt{MAX}, \texttt{SUM}, and \texttt{COUNT} [7].
+    \item \textbf{Usage}: Almost exclusively used in the \texttt{SELECT} output list [8, 9].
+    \item \textbf{Undefined Behavior}: Outputting other columns outside of an aggregate without grouping is \textbf{undefined} [10, 11].
+\end{itemize}
+\end{frame}
+
+% Slide 6: Group By & Having
+\begin{frame}
+\frametitle{Group By and Having}
+\begin{itemize}
+    \item \textbf{GROUP BY}: Projects tuples into subsets to calculate aggregates against each subset [11].
+    \item \textbf{Requirement}: Non-aggregated values in the \texttt{SELECT} clause \textbf{must appear} in the \texttt{GROUP BY} clause [12, 13].
+    \item \textbf{HAVING}: Acts as a \textbf{WHERE clause for GROUP BY}, filtering results based on aggregation computations [13, 14].
+\end{itemize}
+\end{frame}
+
+% Slide 7: String & Date/Time Operations
+\begin{frame}
+\frametitle{String and Date/Time Operations}
+\begin{itemize}
+    \item \textbf{String Matching}: \texttt{LIKE} is used with \texttt{\%} (matches any substring) and \texttt{\_} (matches any one character) [15, 16].
+    \item \textbf{Standard Functions}: SQL-92 defines functions like \texttt{SUBSTRING} and \texttt{UPPER} [16].
+    \item \textbf{Concatenation}: Standard uses \texttt{||}, but syntax varies (e.g., \texttt{+} in MSSQL, \texttt{CONCAT} in MySQL) [17].
+    \item \textbf{Date/Time}: Support varies wildly between DBMSs for manipulating DATE/TIME attributes [17].
+\end{itemize}
+\end{frame}
+
+% Slide 8: Output Redirection & Control
+\begin{frame}
+\frametitle{Output Redirection and Control}
+\begin{itemize}
+    \item \textbf{Redirection}: Store query results in a \textbf{new table} (e.g., \texttt{SELECT INTO} or \texttt{CREATE TABLE AS}) or \textbf{insert} into an existing table [17, 18].
+    \item \textbf{ORDER BY}: Sorts output tuples based on one or more columns; defaults to ASC but can specify DESC [19, 20].
+    \item \textbf{Limiting Results}: \texttt{FETCH \{FIRST|NEXT\} <count> ROWS} limits the number of returned tuples, often used with \texttt{OFFSET} [20, 21].
+\end{itemize}
+\end{frame}
+
+% Slide 9: Window Functions
+\begin{frame}
+\frametitle{Window Functions}
+\begin{itemize}
+    \item \textbf{Definition}: Performs calculations across a set of related tuples \textbf{without collapsing them} into a single output tuple [22].
+    \item \textbf{Syntax}: Uses the \texttt{OVER} keyword to specify grouping [22, 23].
+    \item \textbf{Keywords}: \texttt{PARTITION BY} specifies the group, and \texttt{ORDER BY} can sort entries within that group [23-25].
+    \item \textbf{Special Functions}: Includes \texttt{ROW\_NUMBER()} and \texttt{RANK()} [25, 26].
+\end{itemize}
+\end{frame}
+
+% Slide 10: Nested Queries
+\begin{frame}
+\frametitle{Nested Queries}
+\begin{itemize}
+    \item \textbf{Definition}: Invoke a query inside another to compose complex computations; inner queries can appear almost anywhere [27, 28].
+    \item \textbf{Operators}:
+    \begin{itemize}
+        \item \textbf{ALL}: Must satisfy the expression for \textbf{all} rows in the sub-query [29].
+        \item \textbf{ANY}: Must satisfy for \textbf{at least one} row [29].
+        \item \textbf{IN}: Equivalent to \texttt{= ANY()} [30].
+        \item \textbf{EXISTS}: True if the sub-query returns \textbf{at least one row} [30].
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+% Slide 11: Lateral Joins & CTEs
+\begin{frame}
+\frametitle{Lateral Joins and CTEs}
+\begin{itemize}
+    \item \textbf{Lateral Joins}: Allows a nested query to \textbf{reference attributes} in preceding nested queries, similar to a for-loop [31, 32].
+    \item \textbf{Common Table Expressions (CTEs)}: Defines a \textbf{temporary result set} for a single query [33, 34].
+    \item \textbf{Benefits}: Provides an alternative to nested queries and explicit temporary tables [33].
+\end{itemize}
+\end{frame}
+
+% Slide 12: Conclusion & Admin
+\begin{frame}
+\frametitle{Conclusion and Next Steps}
+\begin{itemize}
+    \item \textbf{Key Takeaway}: Always strive to compute your answer as a \textbf{single SQL statement} [35].
+    \item \textbf{Trivia}: Standard identifiers are case-insensitive, and accessing official standard documents requires payment [35].
+    \item \textbf{Homework \#1}: Focused on basic data analysis using \textbf{SQLite} and \textbf{DuckDB}, due Sept 8th [35, 36].
+    \item \textbf{Next Class}: The journey into system internals begins with \textbf{Storage} [36].
+\end{itemize}
+\end{frame}
+
+\end{document}

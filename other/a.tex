@@ -1,0 +1,175 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    language=SQL,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    breaklines=true
+}
+
+\title{Modern SQL}
+\subtitle{15-445/645 FALL 2024}
+\author{Prof. Andy Pavlo}
+\institute{Carnegie Mellon University}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Today's Agenda}
+    \begin{itemize}
+        \item Database Systems Background [cite: 301]
+        \item Relational Model [cite: 301]
+        \item Relational Algebra [cite: 301]
+        \item Alternative Data Models [cite: 301]
+        \item Q\&A Session [cite: 301]
+    \end{itemize}
+    \vfill
+    \hfill 2
+\end{frame}
+
+\begin{frame}{Last Class}
+    \begin{itemize}
+        \item We introduced the Relational Model as the superior data model for databases. [cite: 301]
+        \item We then showed how Relational Algebra is the building blocks that will allow us to query and modify a relational database. [cite: 302]
+    \end{itemize}
+    \vfill
+    \hfill 3
+\end{frame}
+
+\begin{frame}{SQL History}
+    \begin{itemize}
+        \item In 1971, IBM created its first relational query language called SQUARE. [cite: 303]
+        \item IBM then created "SEQUEL" in 1972 for IBM System R prototype DBMS (Structured English Query Language). [cite: 304, 305]
+        \item IBM releases commercial SQL-based DBMSs:
+        \begin{itemize}
+            \item System/38 (1979) [cite: 305]
+            \item SQL/DS (1981) [cite: 305]
+            \item DB2 (1983) [cite: 305]
+        \end{itemize}
+    \end{itemize}
+    \vfill
+    \hfill 4
+\end{frame}
+
+\begin{frame}{SQL Standards Evolution}
+    \begin{itemize}
+        \item ANSI Standard in 1986. ISO in 1987 (Structured Query Language). [cite: 307]
+        \item Current standard is \textbf{SQL:2023}. [cite: 307]
+        \begin{itemize}
+            \item SQL:2023 $\rightarrow$ Property Graph Queries, Multi-Dim. Arrays [cite: 307]
+            \item SQL:2016 $\rightarrow$ JSON, Polymorphic tables [cite: 307]
+            \item SQL:2011 $\rightarrow$ Temporal DBs, Pipelined DML [cite: 307]
+            \item SQL:2008 $\rightarrow$ Truncation, Fancy Sorting [cite: 307]
+            \item SQL:2003 $\rightarrow$ XML, Windows, Sequences, Auto-Gen IDs [cite: 307]
+            \item SQL:1999 $\rightarrow$ Regex, Triggers, OO [cite: 308]
+        \end{itemize}
+        \item The minimum language syntax for SQL support is \textbf{SQL-92}. [cite: 308]
+    \end{itemize}
+    \vfill
+    \hfill 6
+\end{frame}
+
+\begin{frame}{Relational Languages}
+    \begin{itemize}
+        \item Data Manipulation Language (DML) [cite: 327]
+        \item Data Definition Language (DDL) [cite: 327]
+        \item Data Control Language (DCL) [cite: 327]
+        \item Also includes: View definition, Integrity \& Referential Constraints, Transactions. [cite: 327]
+        \item \textbf{Important:} SQL is based on bags (duplicates), not sets (no duplicates). [cite: 327]
+    \end{itemize}
+    \vfill
+    \hfill 10
+\end{frame}
+
+\begin{frame}{Aggregates}
+    Functions that return a single value from a bag of tuples: [cite: 329]
+    \begin{itemize}
+        \item \texttt{AVG(col)}: Return average value [cite: 329]
+        \item \texttt{MIN(col)}: Return minimum value [cite: 330]
+        \item \texttt{MAX(col)}: Return maximum value [cite: 330]
+        \item \texttt{SUM(col)}: Return sum of values [cite: 330]
+        \item \texttt{COUNT(col)}: Return number of values [cite: 331]
+    \end{itemize}
+    \vfill
+    \hfill 13
+\end{frame}
+
+\begin{frame}[fragile]{Aggregate Example}
+    Get \# of students with a "@cs" login: [cite: 332]
+    \begin{lstlisting}
+SELECT COUNT(login) AS cnt
+FROM student 
+WHERE login LIKE '%@cs'
+    \end{lstlisting}
+    Also equivalent: \texttt{COUNT(*)}, \texttt{COUNT(1)}, \texttt{COUNT(1+1+1)}. [cite: 333, 334, 335]
+    \vfill
+    \hfill 17
+\end{frame}
+
+\begin{frame}[fragile]{Group By}
+    Project tuples into subsets and calculate aggregates against each subset. [cite: 342]
+    \begin{lstlisting}
+SELECT AVG(s.gpa), e.cid
+FROM enrolled AS e JOIN student AS s
+  ON e.sid = s.sid
+GROUP BY e.cid
+    \end{lstlisting}
+    \textbf{Note:} Non-aggregated values in SELECT must appear in GROUP BY. [cite: 343]
+    \vfill
+    \hfill 22
+\end{frame}
+
+\begin{frame}[fragile]{Having}
+    Filters results based on aggregation computation (like a WHERE clause for GROUP BY). [cite: 346, 347]
+    \begin{lstlisting}
+SELECT AVG(s.gpa) AS avg_gpa, e.cid
+FROM enrolled AS e, student AS s
+WHERE e.sid = s.sid
+GROUP BY e.cid
+HAVING avg_gpa > 3.9;
+    \end{lstlisting}
+    \vfill
+    \hfill 28
+\end{frame}
+
+\begin{frame}{Window Functions}
+    Performs calculation across tuples related to the current tuple without collapsing them. Supports running totals, ranks, and moving averages. [cite: 374]
+    \begin{itemize}
+        \item \texttt{SELECT FUNC-NAME(...) OVER (...) FROM tableName} [cite: 376]
+        \item Special functions: \texttt{ROW\_NUMBER()}, \texttt{RANK()}. [cite: 378]
+        \item \texttt{OVER} specifies grouping (\texttt{PARTITION BY}) and sorting (\texttt{ORDER BY}). [cite: 380, 381, 383]
+    \end{itemize}
+    \vfill
+    \hfill 43
+\end{frame}
+
+\begin{frame}[fragile]{Common Table Expressions (CTE)}
+    Specify a temporary result set referenced by another part of the query (like a temp table for one query). [cite: 413, 414]
+    \begin{lstlisting}
+WITH cteSource (maxId) AS (
+  SELECT MAX(sid) FROM enrolled
+)
+SELECT name FROM student, cteSource
+WHERE student.sid = cteSource.maxId
+    \end{lstlisting}
+    \vfill
+    \hfill 75
+\end{frame}
+
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \item SQL is a hot language. [cite: 423]
+        \item Lots of NL2SQL tools, but writing SQL is not going away. [cite: 424]
+        \item You should (almost) always strive to compute your answer as a single SQL statement. [cite: 425]
+    \end{itemize}
+    \vfill
+    \hfill 77
+\end{frame}
+
+\end{document}

@@ -1,0 +1,791 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+% Theme Setup to match CMU-DB style
+\usetheme{Madrid}
+\usecolortheme{beaver} % Red/Gray theme roughly matches
+\setbeamercolor{title}{bg=darkgray,fg=white}
+\setbeamercolor{frametitle}{bg=darkgray,fg=white}
+\setbeamercolor{structure}{fg=darkred}
+
+% SQL Syntax Highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{sqlstyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=none,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    upquote=true,
+    language=SQL
+}
+\lstset{style=sqlstyle}
+
+% Meta Data
+\title{Modern SQL}
+\subtitle{15-445/645 -- Fall 2024}
+\author{Prof. Andy Pavlo}
+\institute{Carnegie Mellon University}
+\date{Fall 2024}
+
+\begin{document}
+
+%--- Slide 1 ---
+\frame{\titlepage}
+
+%--- Slide 2 ---
+\begin{frame}{Today's Agenda}
+    \begin{enumerate}
+        \item Database Systems Background
+        \item Relational Model
+        \item Relational Algebra
+        \item Alternative Data Models
+        \item Q\&A Session
+    \end{enumerate}
+\end{frame}
+
+%--- Slide 3 ---
+\begin{frame}{Last Class}
+    \begin{itemize}
+        \item We introduced the \textbf{Relational Model} as the superior data model for databases.
+        \item We then showed how \textbf{Relational Algebra} is the building blocks that will allow us to query and modify a relational database.
+    \end{itemize}
+\end{frame}
+
+%--- Slide 4-5 ---
+\begin{frame}{SQL History}
+    \begin{itemize}
+        \item In 1971, IBM created its first relational query language called \textbf{SQUARE}.
+        \item IBM then created "\textbf{SEQUEL}" in 1972 for IBM System R prototype DBMS.
+        \begin{itemize}
+            \item Structured English Query Language
+        \end{itemize}
+        \item IBM releases commercial SQL-based DBMSs:
+        \begin{itemize}
+            \item System/38 (1979)
+            \item SQL/DS (1981)
+            \item DB2 (1983)
+        \end{itemize}
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Original Syntax Examples (System R Papers):}
+    \begin{itemize}
+        \item Q2. Find average salary of employees in Shoe Dept:
+        \[ AVG \: ({SAL}^{EMP'}_{DEPT}('SHOE')) \]
+        \item Q3. Find items sold by departments on the 2nd floor:
+        \[ SALES \cdot ITEM \: (LOC \cdot DEPT \: (DEPT \cdot FLOOR ('2'))) \]
+    \end{itemize}
+\end{frame}
+
+%--- Slide 6 ---
+\begin{frame}{SQL Standards History}
+    \begin{itemize}
+        \item \textbf{ANSI Standard} in 1986. \textbf{ISO} in 1987.
+        \item Current standard is \textbf{SQL:2023}.
+    \end{itemize}
+    \begin{description}
+        \item[SQL:2023] Property Graph Queries, Multi-Dim. Arrays
+        \item[SQL:2016] JSON, Polymorphic tables
+        \item[SQL:2011] Temporal DBs, Pipelined DML
+        \item[SQL:2008] Truncation, Fancy Sorting
+        \item[SQL:2003] XML, Windows, Sequences, Auto-Gen IDs
+        \item[SQL:1999] Regex, Triggers, OO
+    \end{description}
+    \vspace{0.2cm}
+    \textit{The minimum language syntax a system needs to say that it supports SQL is \textbf{SQL-92}.}
+\end{frame}
+
+%--- Slide 7-8 ---
+\begin{frame}{SQL History: The "Death of SQL" Predictions}
+    \begin{block}{Jo Kristian Bergum (@jobergum) - Apr 27, 2023}
+    "Tensor and vector databases will replace most legacy databases in this decade. A disruption fueled by natural language interfaces and deep neural representations. In other words: \textbf{Natural query languages (NQL) replace the structured query language (SQL).}"
+    \end{block}
+    
+    \begin{block}{Gagan Biyani (@gaganbiyani) - May 18, 2023}
+    "SQL is going to die at the hands of an AI. I'm serious. @mayowaoshin is already doing this. Takes your company's data and ingests it into ChatGPT... just ask it questions using natural language."
+    \end{block}
+\end{frame}
+
+%--- Slide 9 ---
+\begin{frame}{SQL History: The Reality (IEEE Spectrum)}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+           \textbf{IEEE Spectrum: The Rise of SQL} (Aug 2022)
+           \begin{itemize}
+               \item "It's become the second programming language everyone needs to know."
+               \item SQL has become the primary query language for accessing and managing data specifically in relational databases.
+               \item \textbf{Rankings:} SQL dominated the jobs ranking in IEEE Spectrum's interactive rankings.
+               \item "Normally top position is occupied by Python... but the sheer number of times employers said they wanted developers with SQL skills... boosted it to No. 1."
+           \end{itemize}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \begin{quote}
+                "This ubiquity means that every software developer will have to interact with databases no matter the field, and SQL is the de facto standard..."
+                \\ -- Prof. Andy Pavlo
+            \end{quote}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%--- Slide 10 ---
+\begin{frame}{Relational Languages}
+    \begin{itemize}
+        \item \textbf{DML:} Data Manipulation Language
+        \item \textbf{DDL:} Data Definition Language
+        \item \textbf{DCL:} Data Control Language
+    \end{itemize}
+    Also includes:
+    \begin{itemize}
+        \item View definition
+        \item Integrity \& Referential Constraints
+        \item Transactions
+    \end{itemize}
+    \begin{alertblock}{Important}
+    SQL is based on \textbf{bags} (duplicates allowed) not \textbf{sets} (no duplicates).
+    \end{alertblock}
+\end{frame}
+
+%--- Slide 11 ---
+\begin{frame}{Today's Agenda}
+    \begin{itemize}
+        \item Aggregations + Group By
+        \item String / Date / Time Operations
+        \item Output Control + Redirection
+        \item Window Functions
+        \item Nested Queries
+        \item Lateral Joins
+        \item Common Table Expressions
+    \end{itemize}
+\end{frame}
+
+%--- Slide 12 ---
+\begin{frame}[fragile]{Example Database}
+    
+    \begin{columns}[t]
+        \begin{column}{0.32\textwidth}
+            \textbf{student} (sid, name, login, gpa)
+            \begin{tabular}{|l|l|l|l|l|}
+            \hline
+            \textbf{sid} & \textbf{name} & \textbf{login} & \textbf{age} & \textbf{gpa} \\ \hline
+            53666 & RZA & rza@cs & 55 & 4.0 \\ \hline
+            53688 & Taylor & swift@cs & 27 & 3.9 \\ \hline
+            53655 & Tupac & shakur@cs & 25 & 3.5 \\ \hline
+            \end{tabular}
+        \end{column}
+        
+        \begin{column}{0.32\textwidth}
+            \textbf{enrolled} (sid, cid, grade)
+            \begin{tabular}{|l|l|l|}
+            \hline
+            \textbf{sid} & \textbf{cid} & \textbf{grade} \\ \hline
+            53666 & 15-445 & C \\ \hline
+            53688 & 15-721 & A \\ \hline
+            53688 & 15-826 & B \\ \hline
+            53655 & 15-445 & B \\ \hline
+            53666 & 15-721 & C \\ \hline
+            \end{tabular}
+        \end{column}
+        
+        \begin{column}{0.32\textwidth}
+            \textbf{course} (cid, name)
+            \begin{tabular}{|l|l|}
+            \hline
+            \textbf{cid} & \textbf{name} \\ \hline
+            15-445 & Database Systems \\ \hline
+            15-721 & Adv. DB Systems \\ \hline
+            15-826 & Data Mining \\ \hline
+            15-799 & Special Topics \\ \hline
+            \end{tabular}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%--- Slide 13 ---
+\begin{frame}{Aggregates}
+    Functions that return a single value from a bag of tuples:
+    \begin{itemize}
+        \item \textbf{AVG(col)}: Return the average col value.
+        \item \textbf{MIN(col)}: Return minimum col value.
+        \item \textbf{MAX(col)}: Return maximum col value.
+        \item \textbf{SUM(col)}: Return sum of values in col.
+        \item \textbf{COUNT(col)}: Return \# of values for col.
+    \end{itemize}
+\end{frame}
+
+%--- Slide 14-17 ---
+\begin{frame}[fragile]{Aggregates}
+    Aggregate functions can (almost) only be used in the SELECT output list.
+    
+    Get \# of students with a ``@cs'' login:
+    
+    \begin{lstlisting}
+SELECT COUNT(login) AS cnt
+FROM student WHERE login LIKE '%@cs'
+    \end{lstlisting}
+    
+    \pause
+    \begin{lstlisting}
+SELECT COUNT(*) AS cnt
+FROM student WHERE login LIKE '%@cs'
+    \end{lstlisting}
+    
+    \pause
+    \begin{lstlisting}
+SELECT COUNT(1) AS cnt
+FROM student WHERE login LIKE '%@cs'
+    \end{lstlisting}
+    
+    \pause
+    \begin{lstlisting}
+SELECT COUNT(1+1+1) AS cnt
+FROM student WHERE login LIKE '%@cs'
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 18 ---
+\begin{frame}[fragile]{Multiple Aggregates}
+    Get the number of students and their average GPA that have a ``@cs'' login.
+    
+    \begin{lstlisting}
+SELECT AVG(gpa), COUNT(sid)
+FROM student WHERE login LIKE '%@cs'
+    \end{lstlisting}
+    
+    \textbf{Result:}
+    \begin{tabular}{ll}
+    AVG(gpa) & COUNT(sid) \\
+    3.8 & 3 
+    \end{tabular}
+\end{frame}
+
+%--- Slide 19-20 ---
+\begin{frame}[fragile]{Aggregates: Undefined Output}
+    Output of other columns outside of an aggregate is undefined.
+    
+    Get the average GPA of students enrolled in each course.
+    \begin{lstlisting}
+SELECT AVG(s.gpa), e.cid
+FROM enrolled AS e JOIN student AS s
+  ON e.sid = s.sid
+    \end{lstlisting}
+    
+    \begin{itemize}
+        \item \texttt{AVG(s.gpa)} $\rightarrow$ 3.86
+        \item \texttt{e.cid} $\rightarrow$ \textbf{??? (Undefined)}
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textbf{Solution (Hack):}
+    \begin{lstlisting}
+SELECT AVG(s.gpa), ANY_VALUE(e.cid) ...
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 21 ---
+\begin{frame}[fragile]{Group By}
+    Project tuples into subsets and calculate aggregates against each subset.
+    
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+        \begin{lstlisting}
+SELECT AVG(s.gpa), e.cid
+FROM enrolled AS e 
+JOIN student AS s
+  ON e.sid = s.sid
+GROUP BY e.cid
+        \end{lstlisting}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \scriptsize
+            \textbf{Groups:}
+            \begin{itemize}
+                \item 15-721 (GPA: 2.25, 2.70) $\rightarrow$ Avg 2.46
+                \item 15-826 (GPA: 2.75, 3.90, 3.50) $\rightarrow$ Avg 3.39
+                \item 15-445 (GPA: 1.89) $\rightarrow$ Avg 1.89
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%--- Slide 22-24 ---
+\begin{frame}[fragile]{Group By Requirements}
+    Non-aggregated values in SELECT output clause \textbf{must} appear in GROUP BY clause.
+    
+    \textbf{Incorrect:}
+    \begin{lstlisting}
+SELECT AVG(s.gpa), e.cid, s.name
+FROM enrolled AS e, student AS s
+WHERE e.sid = s.sid
+GROUP BY e.cid
+    \end{lstlisting}
+    
+    \textbf{Correct:}
+    \begin{lstlisting}
+SELECT AVG(s.gpa), e.cid, s.name
+...
+GROUP BY e.cid, s.name
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 25-27 ---
+\begin{frame}[fragile]{Having}
+    Filters results based on aggregation computation. (Like a WHERE clause for a GROUP BY).
+    
+    \begin{lstlisting}
+SELECT AVG(s.gpa) AS avg_gpa, e.cid
+FROM enrolled AS e, student AS s
+WHERE e.sid = s.sid
+GROUP BY e.cid
+HAVING avg_gpa > 3.9;
+    \end{lstlisting}
+    
+    \textit{Note: \texttt{WHERE} filters input tuples. \texttt{HAVING} filters output groups.}
+\end{frame}
+
+%--- Slide 28 ---
+\begin{frame}{String Operations: Case Sensitivity}
+    \begin{table}
+        \begin{tabular}{l c c}
+            \toprule
+            \textbf{System} & \textbf{String Case} & \textbf{String Quotes} \\
+            \midrule
+            SQL-92 & Sensitive & Single Only \\
+            Postgres & Sensitive & Single Only \\
+            MySQL & Insensitive & Single/Double \\
+            SQLite & Sensitive & Single/Double \\
+            MSSQL & Sensitive & Single Only \\
+            Oracle & Sensitive & Single Only \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \footnotesize
+    Example: \texttt{WHERE UPPER(name) = UPPER('TuPaC')} vs \texttt{WHERE name = "TuPaC"}
+\end{frame}
+
+%--- Slide 29 ---
+\begin{frame}[fragile]{String Operations: LIKE}
+    \texttt{LIKE} is used for string matching.
+    \begin{itemize}
+        \item \textbf{'\%'} Matches any substring (including empty strings).
+        \item \textbf{'\_'} Match any one character.
+    \end{itemize}
+    
+    \begin{columns}
+        \begin{column}{0.45\textwidth}
+        \begin{lstlisting}
+SELECT * FROM enrolled AS e
+WHERE e.cid LIKE '15-%'
+        \end{lstlisting}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+        \begin{lstlisting}
+SELECT * FROM student AS s
+WHERE s.login LIKE '%@c_'
+        \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%--- Slide 30-31 ---
+\begin{frame}[fragile]{String Operations: Functions}
+    SQL-92 defines string functions, but DBMSs vary.
+    
+    \begin{lstlisting}
+SELECT SUBSTRING(name,1,5) AS abbrv_name
+FROM student WHERE sid = 53688
+    \end{lstlisting}
+    
+    \textbf{Concatenation:}
+    \begin{itemize}
+        \item \textbf{SQL-92 / Postgres / Oracle:} \texttt{||} 
+        \begin{lstlisting}
+WHERE login = LOWER(name) || '@cs'
+        \end{lstlisting}
+        \item \textbf{MSSQL:} \texttt{+}
+        \begin{lstlisting}
+WHERE login = LOWER(name) + '@cs'
+        \end{lstlisting}
+        \item \textbf{MySQL:} \texttt{CONCAT}
+        \begin{lstlisting}
+WHERE login = CONCAT(LOWER(name), '@cs')
+        \end{lstlisting}
+    \end{itemize}
+\end{frame}
+
+%--- Slide 32 ---
+\begin{frame}{Date/Time Operations}
+    \begin{itemize}
+        \item Operations to manipulate and modify DATE/TIME attributes.
+        \item Can be used in both output and predicates.
+        \item Support/syntax varies wildly between DBMSs.
+    \end{itemize}
+\end{frame}
+
+%--- Slide 33-34 ---
+\begin{frame}[fragile]{Output Redirection}
+    Store query results in another table.
+    
+    \textbf{SQL-92 (Insert into existing):}
+    \begin{lstlisting}
+INSERT INTO CourseIds
+(SELECT DISTINCT cid FROM enrolled);
+    \end{lstlisting}
+    
+    \textbf{Create New Table (Varies):}
+    \begin{itemize}
+        \item \textbf{MySQL:} \texttt{CREATE TABLE CourseIds (SELECT ...)}
+        \item \textbf{SQL-92 (Standard):} \texttt{SELECT ... INTO CourseIds FROM ...}
+        \item \textbf{Postgres:} \texttt{SELECT ... INTO TEMPORARY CourseIds ...}
+    \end{itemize}
+\end{frame}
+
+%--- Slide 35-37 ---
+\begin{frame}[fragile]{Output Control: ORDER BY}
+    \texttt{ORDER BY <column*> [ASC|DESC]}
+    
+    \begin{lstlisting}
+SELECT sid, grade FROM enrolled
+WHERE cid = '15-721'
+ORDER BY grade
+    \end{lstlisting}
+    
+    Can also order by multiple columns or column index:
+    \begin{lstlisting}
+ORDER BY grade DESC, sid ASC
+    \end{lstlisting}
+    
+    \begin{lstlisting}
+ORDER BY 2  -- Sort by second column (grade)
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 38-40 ---
+\begin{frame}[fragile]{Output Control: LIMIT / FETCH}
+    Limit the \# of tuples returned.
+    
+    \textbf{Standard Syntax:}
+    \begin{lstlisting}
+SELECT sid, name FROM student
+WHERE login LIKE '%@cs'
+FETCH FIRST 10 ROWS ONLY;
+    \end{lstlisting}
+    
+    \textbf{With Offset (Range):}
+    \begin{lstlisting}
+ORDER BY gpa
+OFFSET 10 ROWS
+FETCH FIRST 10 ROWS WITH TIES;
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 41-43 ---
+\begin{frame}{Window Functions}
+    Performs a calculation across a set of tuples that are related to the current tuple, without collapsing them into a single output tuple.
+    
+    \begin{itemize}
+        \item Supports running totals, ranks, moving averages.
+        \item Syntax: \texttt{SELECT FUNC-NAME(...) OVER (...) FROM tableName}
+    \end{itemize}
+    
+    \textbf{Functions:}
+    \begin{itemize}
+        \item Aggregation functions (AVG, MIN, MAX...)
+        \item \textbf{ROW\_NUMBER()}: \# of the current row
+        \item \textbf{RANK()}: Order position of the current row
+    \end{itemize}
+\end{frame}
+
+%--- Slide 44 ---
+\begin{frame}[fragile]{Window Functions: Example}
+    \begin{lstlisting}
+SELECT *, ROW_NUMBER() OVER () AS row_num
+FROM enrolled
+    \end{lstlisting}
+    
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    sid & cid & grade & row\_num \\ \hline
+    53666 & 15-445 & C & 1 \\ \hline
+    53688 & 15-721 & A & 2 \\ \hline
+    53688 & 15-826 & B & 3 \\ \hline
+    ... & ... & ... & ... \\ \hline
+    \end{tabular}
+\end{frame}
+
+%--- Slide 45-47 ---
+\begin{frame}[fragile]{Window Functions: PARTITION BY}
+    The \texttt{OVER} keyword specifies how to group together tuples when computing the window function.
+    
+    \begin{lstlisting}
+SELECT cid, sid,
+  ROW_NUMBER() OVER (PARTITION BY cid)
+FROM enrolled
+ORDER BY cid
+    \end{lstlisting}
+    
+    \textbf{Result:} Resets counter for each \texttt{cid}.
+    \begin{tabular}{llc}
+    \textbf{cid} & \textbf{sid} & \textbf{row\_number} \\
+    15-445 & 53666 & 1 \\
+    15-445 & 53655 & 2 \\
+    15-721 & 53688 & 1 \\
+    \end{tabular}
+\end{frame}
+
+%--- Slide 48 ---
+\begin{frame}[fragile]{Window Functions: ORDER BY}
+    You can also include an \texttt{ORDER BY} in the window grouping to sort entries in each group.
+    
+    \begin{lstlisting}
+SELECT *,
+  ROW_NUMBER() OVER (ORDER BY cid)
+FROM enrolled
+ORDER BY cid
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 49-50 ---
+\begin{frame}[fragile]{Window Functions: Filtering Ranks}
+    Find the student with the second highest grade for each course.
+    
+    \begin{lstlisting}
+SELECT * FROM (
+  SELECT *, RANK() OVER (PARTITION BY cid
+                         ORDER BY grade ASC) AS rank
+  FROM enrolled
+) AS ranking
+WHERE ranking.rank = 2
+    \end{lstlisting}
+    \begin{enumerate}
+        \item Group tuples by cid
+        \item Then sort by grade
+    \end{enumerate}
+\end{frame}
+
+%--- Slide 51-53 ---
+\begin{frame}[fragile]{Nested Queries}
+    Invoke a query inside of another query to compose more complex computations.
+    
+    \begin{lstlisting}
+SELECT name FROM student WHERE
+sid IN (SELECT sid FROM enrolled)
+    \end{lstlisting}
+    
+    \begin{itemize}
+        \item Outer Query vs Inner Query.
+        \item Can appear in SELECT output, FROM clause, or WHERE clause.
+    \end{itemize}
+\end{frame}
+
+%--- Slide 54-57 ---
+\begin{frame}[fragile]{Nested Queries Example}
+    Get the names of students in '15-445'.
+    
+    \begin{lstlisting}
+SELECT name FROM student
+WHERE sid IN (
+    SELECT sid FROM enrolled
+    WHERE cid = '15-445'
+)
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 58 ---
+\begin{frame}{Nested Queries: Operators}
+    \begin{itemize}
+        \item \textbf{ALL}: Must satisfy expression for \textit{all} rows in sub-query.
+        \item \textbf{ANY}: Must satisfy expression for \textit{at least one} row in sub-query.
+        \item \textbf{IN}: Equivalent to \texttt{=ANY()}.
+        \item \textbf{EXISTS}: At least one row is returned (no attribute comparison needed).
+    \end{itemize}
+\end{frame}
+
+%--- Slide 59 ---
+\begin{frame}[fragile]{Nested Queries: ANY Example}
+    Get the names of students in '15-445':
+    
+    \begin{lstlisting}
+SELECT name FROM student
+WHERE sid = ANY(
+    SELECT sid FROM enrolled
+    WHERE cid = '15-445'
+)
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 60-63 ---
+\begin{frame}[fragile]{Nested Queries: Highest ID}
+    Find student record with the highest id that is enrolled in at least one course.
+    
+    \begin{lstlisting}
+SELECT sid, name FROM student
+WHERE sid >= ALL(
+    SELECT sid FROM enrolled
+)
+    \end{lstlisting}
+    
+    \textit{(Alternatively using MAX)}
+    \begin{lstlisting}
+SELECT sid, name FROM student
+WHERE sid IN (
+    SELECT MAX(sid) FROM enrolled
+)
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 64-65 ---
+\begin{frame}[fragile]{Nested Queries: NOT EXISTS}
+    Find all courses that have no students enrolled in it.
+    
+    \begin{lstlisting}
+SELECT * FROM course
+WHERE NOT EXISTS(
+    SELECT * FROM enrolled
+    WHERE course.cid = enrolled.cid
+)
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 66 ---
+\begin{frame}[fragile]{Lateral Joins}
+    The \textbf{LATERAL} operator allows a nested query to reference attributes in other nested queries that precede it.
+    
+    \begin{itemize}
+        \item Think of it like a \texttt{for} loop.
+    \end{itemize}
+    
+    \begin{lstlisting}
+SELECT * FROM
+  (SELECT 1 AS x) AS t1,
+  LATERAL (SELECT t1.x+1 AS y) AS t2;
+    \end{lstlisting}
+    \textbf{Result:} x=1, y=2
+\end{frame}
+
+%--- Slide 67-69 ---
+\begin{frame}[fragile]{Lateral Join Example}
+    Calculate the number of students enrolled in each course and the average GPA.
+    
+    \begin{lstlisting}
+SELECT * FROM course AS c,
+  LATERAL (SELECT COUNT(*) AS cnt FROM enrolled
+           WHERE enrolled.cid = c.cid) AS t1,
+  LATERAL (SELECT AVG(gpa) AS avg FROM student AS s
+           JOIN enrolled AS e ON s.sid = e.sid
+           WHERE e.cid = c.cid) AS t2;
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 70-71 ---
+\begin{frame}[fragile]{Common Table Expressions (CTE)}
+    Specify a temporary result set that can then be referenced by another part of that query.
+    \begin{itemize}
+        \item Alternative to nested queries and views.
+    \end{itemize}
+    
+    \begin{lstlisting}
+WITH cteName AS (
+    SELECT 1
+)
+SELECT * FROM cteName
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 72-74 ---
+\begin{frame}[fragile]{CTE Binding}
+    You can bind/alias output columns to names before the AS keyword.
+    
+    \begin{lstlisting}
+WITH cteName (col1, col2) AS (
+    SELECT 1, 2
+)
+SELECT col1 + col2 FROM cteName
+    \end{lstlisting}
+    
+    \textbf{Example (Max ID):}
+    \begin{lstlisting}
+WITH cteSource (maxId) AS (
+    SELECT MAX(sid) FROM enrolled
+)
+SELECT name FROM student, cteSource
+WHERE student.sid = cteSource.maxId
+    \end{lstlisting}
+\end{frame}
+
+%--- Slide 75 ---
+\begin{frame}{Other Things To Note}
+    \begin{itemize}
+        \item Identifiers (table and column names) are case-insensitive.
+        \item Makes it harder for applications that care about case (e.g., CamelCase).
+        \item One often sees quotes around names: \texttt{"ArtistList.firstName"}
+        \item \textit{ISO/IEC 9075-2:2023 Standard Document costs CHF 216.}
+    \end{itemize}
+\end{frame}
+
+%--- Slide 76 ---
+\begin{frame}{Conclusion}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item SQL is a hot language.
+                \item Lots of NL2SQL tools, but writing SQL is not going away.
+                \item You should (almost) always strive to compute your answer as a single SQL statement.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Top Programming Languages 2023 (IEEE Spectrum)}
+            \begin{table}
+                \begin{tabular}{lr}
+                \textbf{Language} & \textbf{Rank} \\ \hline
+                \rowcolor{yellow} SQL & 1.00 \\
+                Python & 0.99 \\
+                Java & 0.76 \\
+                JavaScript & 0.55 \\
+                C++ & 0.45 \\
+                \end{tabular}
+            \end{table}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%--- Slide 77 ---
+\begin{frame}{Homework \#1}
+    \textbf{Write SQL queries to perform basic data analysis.}
+    \begin{itemize}
+        \item Write the queries locally using SQLite + DuckDB.
+        \item Submit them to Gradescope.
+        \item You can submit multiple times and use your best score.
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Due: Sunday Sept 8th @ 11:59pm}
+\end{frame}
+
+%--- Slide 78 ---
+\begin{frame}{Next Class}
+    \centering
+    \Large
+    We will begin our journey to understanding the internals of database systems starting with \textbf{Storage}!
+\end{frame}
+
+\end{document}

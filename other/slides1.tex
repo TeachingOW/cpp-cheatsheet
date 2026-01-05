@@ -1,0 +1,242 @@
+
+% --- PAGE 31 ---
+\begin{frame}{Data Independence}
+    Isolate the user/application from low level data representation.
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{itemize}
+            \item $\rightarrow$ The user only worries about high-level application logic.
+            \item $\rightarrow$ DBMS optimizes the layout according to operating environment, database contents, and workload.
+            \item $\rightarrow$ DBMS can then re-optimize the database if/when these factors change.
+        \end{itemize}
+        \column{0.4\textwidth}
+        \includegraphics[width=\textwidth]{extracted_p31_1_image.png}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 32 ---
+\begin{frame}{Relational Model Structure}
+    \begin{itemize}
+        \item A \textbf{relation} is an unordered set that contains the relationship of attributes that represent entities.
+        \item A \textbf{tuple} is a set of attribute values in the relation.
+        \begin{itemize}
+            \item Values are (normally) atomic/scalar.
+            \item The value NULL is a member of every domain (if allowed).
+        \end{itemize}
+    \end{itemize}
+
+    \vspace{1em}
+    \textbf{n-ary Relation = Table with n columns}
+
+    \small
+    \begin{table}
+    \begin{tabular}{lll}
+    \toprule
+    \textbf{name} & \textbf{year} & \textbf{country} \\
+    \midrule
+    Wu-Tang Clan & 1992 & USA \\
+    Notorious BIG & 1992 & USA \\
+    GZA & 1990 & USA \\
+    \bottomrule
+    \end{tabular}
+    \caption{Artist(name, year, country)}
+    \end{table}
+\end{frame}
+
+% --- PAGE 33 ---
+\begin{frame}{Relational Model: Primary Keys}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{itemize}
+            \item A relation's \textbf{primary key} uniquely identifies a single tuple.
+            \item Some DBMSs automatically create an internal primary key if a table does not define one.
+            \item DBMS can auto-generate primary keys:
+            \begin{itemize}
+                \item \texttt{IDENTITY}
+                \item \texttt{SEQUENCE}
+                \item \texttt{AUTO\_INCREMENT}
+            \end{itemize}
+        \end{itemize}
+
+        \column{0.4\textwidth}
+        \small
+        \textbf{Artist(name, year, country)}
+        \begin{table}
+        \begin{tabular}{lll}
+        \toprule
+        name & year & country \\
+        \midrule
+        Wu-Tang Clan & 1992 & USA \\
+        Notorious BIG & 1992 & USA \\
+        GZA & 1990 & USA \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 34 ---
+\begin{frame}{Relational Model: Primary Keys}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \textbf{Example with ID column:}
+
+        \column{0.4\textwidth}
+        \small
+        \textbf{Artist(id, name, year, country)}
+        \begin{table}
+        \begin{tabular}{llll}
+        \toprule
+        id & name & year & country \\
+        \midrule
+        101 & Wu-Tang Clan & 1992 & USA \\
+        102 & Notorious BIG & 1992 & USA \\
+        103 & GZA & 1990 & USA \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 35 ---
+\begin{frame}{Relational Model: Foreign Keys}
+    \textbf{A foreign key} specifies that an attribute in one relation maps to a tuple in another relation.
+\end{frame}
+
+% --- PAGE 36 ---
+\begin{frame}{Relational Model: Foreign Keys}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{Album(id, name, artist, year)}
+        \begin{table}
+        \tiny
+        \begin{tabular}{llll}
+        \toprule
+        id & name & artist & year \\
+        \midrule
+        11 & Enter the Wu-Tang & 101 & 1993 \\
+        22 & St. Ides Mix Tape & ??? & 1994 \\
+        33 & Liquid Swords & 103 & 1995 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+
+        \column{0.5\textwidth}
+        \textbf{Artist(id, name, year, country)}
+        \begin{table}
+        \tiny
+        \begin{tabular}{llll}
+        \toprule
+        id & name & year & country \\
+        \midrule
+        101 & Wu-Tang Clan & 1992 & USA \\
+        102 & Notorious BIG & 1992 & USA \\
+        103 & GZA & 1990 & USA \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 37 ---
+\begin{frame}{Relational Model: Foreign Keys}
+    \textbf{Mapping Table for Many-to-Many}
+
+    \begin{center}
+        \textbf{ArtistAlbum(artist\_id, album\_id)}
+        \begin{table}
+        \begin{tabular}{ll}
+        \toprule
+        artist\_id & album\_id \\
+        \midrule
+        101 & 11 \\
+        101 & 22 \\
+        103 & 22 \\
+        102 & 22 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+    \end{center}
+\end{frame}
+
+% --- PAGE 38 ---
+\begin{frame}{Relational Model: Foreign Keys}
+    \centering
+    \includegraphics[width=0.8\textwidth]{extracted_p38_1_image.png}
+\end{frame}
+
+% --- PAGE 39 ---
+\begin{frame}[fragile]{Relational Model: Constraints}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{itemize}
+            \item User-defined conditions that must hold for all tuples.
+            \item Can check values in one tuple or across tuples.
+            \item DBMS blocks modifications that violate constraints.
+        \end{itemize}
+
+        \column{0.4\textwidth}
+        \begin{lstlisting}[language=SQL]
+CREATE TABLE Artist (
+    name VARCHAR NOT NULL,
+    year INT,
+    country CHAR(60),
+    CHECK (year > 1900)
+);
+        \end{lstlisting}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 40 ---
+\begin{frame}{Data Manipulation Languages (DML)}
+    API for storing and retrieving data.
+    \vspace{1em}
+
+    \begin{itemize}
+        \item \textbf{Procedural} (Relational Algebra): describe how to get data.
+        \item \textbf{Declarative} (Relational Calculus): describe what data you want.
+    \end{itemize}
+\end{frame}
+
+% --- PAGE 41 ---
+\begin{frame}{Relational Algebra}
+    \begin{itemize}
+        \item Based on set algebra.
+        \item Operators take relations as input and produce new relations.
+    \end{itemize}
+
+    \vspace{1em}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item $\sigma$ Select
+            \item $\pi$ Projection
+            \item $\cup$ Union
+            \item $\cap$ Intersection
+        \end{itemize}
+
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item $-$ Difference
+            \item $\times$ Product
+            \item $\bowtie$ Join
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% --- PAGE 42 ---
+\begin{frame}{Relational Algebra: Select}
+    Select tuples in a relation that satisfy a predicate.
+    \begin{itemize}
+        \item Predicate acts as a filter.
+        \item Can combine predicates with AND, OR.
+    \end{itemize}
+
+    \vspace{1em}
+    \textbf{Syntax:} $\sigma_{predicate}(R)$
+
+    \vspace{1em}
+    Example: $\sigma_{a\_id='a2' \land b\_id>102}(R)$
+\end{frame}
+
+\end{document}
